@@ -4,7 +4,10 @@ import { UC_Registrar } from '../logic/registrar.uc';
 import { Dispatcher } from 'src/common/presentation/dispatcher';
 import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
-import { REQ_CrearUsuario } from './dtos/crear-usuario.request';
+import {
+  REQ_CrearUsuario,
+  REQ_CrearUsuarioExtended,
+} from './dtos/crear-usuario.request';
 import { SendResponse } from 'src/common/utils/functions/api-response';
 import { IUser } from 'src/common/presentation/interfaces/usuario.interface';
 
@@ -15,7 +18,7 @@ export class AuthGateway {
       'auth:autenticar': (client) =>
         AuthGateway.autenticar(client as AuthSocket),
       'auth:registrar': (client, data) =>
-        AuthGateway.registrar(client as AuthSocket, data),
+        AuthGateway.registrar(client as AuthSocket, data as REQ_CrearUsuario),
     });
   }
 
@@ -36,12 +39,12 @@ export class AuthGateway {
   /**
    * Registra al usuario con datos personales adicionales.
    */
-  static async registrar(client: AuthSocket, data: unknown) {
+  static async registrar(client: AuthSocket, data: REQ_CrearUsuario) {
     try {
       const body = data as Record<string, any>;
 
       // 1. Mapeamos la entrada al DTO (incluyendo datos de Supabase como fallback)
-      const payload = plainToInstance(REQ_CrearUsuario, {
+      const payload = plainToInstance(REQ_CrearUsuarioExtended, {
         ...body,
         id_supabase: client.user.id,
         nombre: (body?.nombre ||
@@ -58,7 +61,7 @@ export class AuthGateway {
       const response = await UC_Registrar.execute({
         id_supabase: payload.id_supabase,
         nombre: payload.nombre as string,
-        url_foto: payload.urlFoto,
+        url_foto: payload.urlFoto!,
         peso: payload.peso,
         talla: payload.talla,
         fecha_nacimiento: payload.fecha_nacimiento,

@@ -4,9 +4,9 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUrl,
   IsArray,
   ValidateNested,
+  IsUrl,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -22,16 +22,12 @@ export class InfoMedicaDto {
 
 export class REQ_CrearUsuario {
   @IsString()
-  @IsNotEmpty()
-  id_supabase: string; // id de la tabla "users" de supabase (UUID)
-
-  @IsString()
   @IsOptional()
   nombre?: string;
 
-  @IsUrl()
+  @IsDateString()
   @IsOptional()
-  urlFoto?: string;
+  fecha_nacimiento?: string;
 
   @IsNumber()
   @IsOptional()
@@ -40,10 +36,6 @@ export class REQ_CrearUsuario {
   @IsNumber()
   @IsOptional()
   talla?: number;
-
-  @IsDateString()
-  @IsOptional()
-  fecha_nacimiento?: string;
 
   @IsNumber()
   @IsOptional()
@@ -64,4 +56,15 @@ export class REQ_CrearUsuario {
   @IsString({ each: true })
   @IsOptional()
   preferencias?: string[];
+}
+
+// Estos datos no los envia el front, pero son insertados desde el backend
+export class REQ_CrearUsuarioExtended extends REQ_CrearUsuario {
+  @IsString()
+  @IsNotEmpty()
+  id_supabase: string;
+
+  @IsUrl()
+  @IsOptional()
+  urlFoto?: string;
 }
