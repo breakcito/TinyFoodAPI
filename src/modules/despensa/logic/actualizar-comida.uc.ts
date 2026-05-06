@@ -18,13 +18,19 @@ export class UC_ActualizarComida {
       }
 
       // Procesar fechas
-      const payload: any = { ...rest };
-      if (rest.fecha_compra) payload.fecha_compra = new Date(rest.fecha_compra);
-      if (rest.hora_compra) payload.hora_compra = new Date(rest.hora_compra);
-      if (rest.fecha_vencimiento)
-        payload.fecha_vencimiento = new Date(rest.fecha_vencimiento);
-      if (rest.hora_vencimiento)
-        payload.hora_vencimiento = new Date(rest.hora_vencimiento);
+      const payload = {
+        ...rest,
+        fecha_compra: rest.fecha_compra
+          ? new Date(rest.fecha_compra)
+          : undefined,
+        hora_compra: rest.hora_compra ? new Date(rest.hora_compra) : undefined,
+        fecha_vencimiento: rest.fecha_vencimiento
+          ? new Date(rest.fecha_vencimiento)
+          : undefined,
+        hora_vencimiento: rest.hora_vencimiento
+          ? new Date(rest.hora_vencimiento)
+          : undefined,
+      };
 
       const comidaActualizada = await ComidaData.update(id, payload);
       return SendResponse.success(

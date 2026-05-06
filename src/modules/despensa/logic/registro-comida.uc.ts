@@ -10,13 +10,20 @@ export class UC_RegistrarComida {
   ): Promise<ApiResponse> {
     try {
       // Procesar fechas si existen
-      const payload: any = { ...data };
-      if (data.fecha_compra) payload.fecha_compra = new Date(data.fecha_compra);
-      if (data.hora_compra) payload.hora_compra = new Date(data.hora_compra);
-      if (data.fecha_vencimiento)
-        payload.fecha_vencimiento = new Date(data.fecha_vencimiento);
-      if (data.hora_vencimiento)
-        payload.hora_vencimiento = new Date(data.hora_vencimiento);
+      const { ...rest } = data;
+      const payload = {
+        ...rest,
+        fecha_compra: rest.fecha_compra
+          ? new Date(rest.fecha_compra)
+          : undefined,
+        hora_compra: rest.hora_compra ? new Date(rest.hora_compra) : undefined,
+        fecha_vencimiento: rest.fecha_vencimiento
+          ? new Date(rest.fecha_vencimiento)
+          : undefined,
+        hora_vencimiento: rest.hora_vencimiento
+          ? new Date(rest.hora_vencimiento)
+          : undefined,
+      };
 
       const nuevaComida = await ComidaData.create(id_usuario, payload);
       return SendResponse.success(nuevaComida, 'Alimento registrado con éxito');

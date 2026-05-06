@@ -17,7 +17,21 @@ export class ComidaData {
   }
 
   /** Crear un nuevo alimento */
-  static async create(id_usuario: number, payload: any) {
+  static async create(
+    id_usuario: number,
+    payload: {
+      nombre: string;
+      cantidad: string;
+      descripcion?: string;
+      incluir_hora?: boolean;
+      fecha_compra?: Date;
+      hora_compra?: Date;
+      fecha_vencimiento?: Date;
+      hora_vencimiento?: Date;
+      tags?: string;
+      estado?: string;
+    },
+  ) {
     return PrismaService.db.comida.create({
       data: {
         ...payload,
@@ -27,7 +41,21 @@ export class ComidaData {
   }
 
   /** Actualizar un alimento existente */
-  static async update(id: number, payload: any) {
+  static async update(
+    id: number,
+    payload: {
+      nombre?: string;
+      cantidad?: string;
+      descripcion?: string;
+      incluir_hora?: boolean;
+      fecha_compra?: Date;
+      hora_compra?: Date;
+      fecha_vencimiento?: Date;
+      hora_vencimiento?: Date;
+      tags?: string;
+      estado?: string;
+    },
+  ) {
     return PrismaService.db.comida.update({
       where: { id },
       data: payload,
