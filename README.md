@@ -132,6 +132,7 @@ Todas las respuestas deben seguir esta estructura:
 
 ## 8. Scripts de Desarrollo
 
+- `npx skills install`: Instalar SKILLS de IA.
 - `npm run start:dev`: Inicia la API en modo watch.
   - **Host:** Escucha en `0.0.0.0` para permitir que dispositivos móviles en la misma red local (como tu propio celular) puedan alcanzar la API.
   - **Puerto:** `3000`.
