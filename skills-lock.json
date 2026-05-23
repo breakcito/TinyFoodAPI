@@ -1,6 +1,252 @@
 {
   "version": 1,
   "skills": {
+    "adr-drafting": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-core/skills/adr-drafting/SKILL.md",
+      "computedHash": "c570fcd257bed65516adf0b658373092ec088b15c2d5513e2200b6b8a4225be5"
+    },
+    "aws-cdk": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/aws-cdk/SKILL.md",
+      "computedHash": "caa7c67400ced62f0af18db1aebb8775431a1f6bbb817ef348eba93263326987"
+    },
+    "aws-lambda-java-integration": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-lambda-java-integration/SKILL.md",
+      "computedHash": "5f51c71bc6db1cd82be64a8f86f23827dfa0bc8a1f869336733580b79e1eea1b"
+    },
+    "aws-lambda-php-integration": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-php/skills/aws-lambda-php-integration/SKILL.md",
+      "computedHash": "27116f012293b22435d41451b03cc53b034a916ecc090cb88260c9af7ac3de73"
+    },
+    "aws-lambda-python-integration": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-python/skills/aws-lambda-python-integration/SKILL.md",
+      "computedHash": "68fba953a925e9e996c4965e0b7e9e06e0a41fd96ff8df6d81155b9f0a5c81c5"
+    },
+    "aws-lambda-typescript-integration": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/aws-lambda-typescript-integration/SKILL.md",
+      "computedHash": "d612d164707f7f821ef1715755d2b6dd3b5585ccc731edced4f7dc332c6cf3f8"
+    },
+    "aws-rds-spring-boot-integration": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-rds-spring-boot-integration/SKILL.md",
+      "computedHash": "83a1f6d37f3f16234e68d222a4d90d420ee1481a1a4fedba02b780c1259559f4"
+    },
+    "aws-sdk-java-v2-bedrock": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-sdk-java-v2-bedrock/SKILL.md",
+      "computedHash": "677f517913363006777daf22b882130cf2f75ec059f63c2067ccc8636c5ed86f"
+    },
+    "aws-sdk-java-v2-core": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-sdk-java-v2-core/SKILL.md",
+      "computedHash": "caf0e97601e4a71b5d9886faf560faa88c22ccb2aebd15e983e2f9fff8086502"
+    },
+    "aws-sdk-java-v2-dynamodb": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-sdk-java-v2-dynamodb/SKILL.md",
+      "computedHash": "760195947eece7cbb4d308900b66ea2ccb549f80ca3166da3964473788c7421a"
+    },
+    "aws-sdk-java-v2-kms": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-sdk-java-v2-kms/SKILL.md",
+      "computedHash": "4c5e48069a6bb8c51923a01b61ee589ac3a9622cd1ddeaa04140c85b71c9ed6b"
+    },
+    "aws-sdk-java-v2-lambda": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-sdk-java-v2-lambda/SKILL.md",
+      "computedHash": "ab21754ba2ac4b491a72e52202462f075500009af6862fee955d17463434640b"
+    },
+    "aws-sdk-java-v2-messaging": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-sdk-java-v2-messaging/SKILL.md",
+      "computedHash": "974b171ae9c9106cb3dac699748d93efb7f79105112c2b6fce8b280c45c0d231"
+    },
+    "aws-sdk-java-v2-rds": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-sdk-java-v2-rds/SKILL.md",
+      "computedHash": "60bac2da661c43aaa7b1a6e9d9425c547d85557e3f1d23d0e964fbdc3b4dbe26"
+    },
+    "aws-sdk-java-v2-s3": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-sdk-java-v2-s3/SKILL.md",
+      "computedHash": "9026d831ba80182516dc164778b1cd04cbf5d8821f7708f8998bb1ad44d4e956"
+    },
+    "aws-sdk-java-v2-secrets-manager": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/aws-sdk-java-v2-secrets-manager/SKILL.md",
+      "computedHash": "c3c882e9d32e85d450e5a8ff45810203d6b8d51471511ca155d676617c64ff85"
+    },
+    "better-auth": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/better-auth/SKILL.md",
+      "computedHash": "74412bad2890edc886006b0c52058a427095bc21b3f898a911307332afc142a1"
+    },
+    "bug-fix-brief": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-core/skills/bug-fix-brief/SKILL.md",
+      "computedHash": "7d4fb51facdc100caef01759188f087acb8ef8d768a39c70ce047441fb33cf14"
+    },
+    "chunking-strategy": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-ai/skills/chunking-strategy/SKILL.md",
+      "computedHash": "39558dedfa82b30eec7409f2eb816dbf2c02941e1e90a73ed95859cc6cbe95d5"
+    },
+    "clean-architecture": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/clean-architecture/SKILL.md",
+      "computedHash": "930e4d5639e1a0afcebb0f2d43c6d90fedcbacb2c6844d6396ad0d324f758982"
+    },
+    "codex": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-tools/skills/codex/SKILL.md",
+      "computedHash": "feaa13ad8da9f218853b3e5d2bccd7afe8d47284bd91ff7b5aef2dbda40357eb"
+    },
+    "constitution": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-specs/skills/constitution/SKILL.md",
+      "computedHash": "bf921e2326976132fdc942c3ebedddf4b1299b5396e9d3b49b4531714a787304"
+    },
+    "copilot-cli": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-tools/skills/copilot-cli/SKILL.md",
+      "computedHash": "ae9001311a1c633a7721566e1a9ccb52015b92b70984ff0a95f06e0c39d028d6"
+    },
+    "create-pr-from-spec": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-specs/skills/create-pr-from-spec/SKILL.md",
+      "computedHash": "7c71c165038c7e8f1ef3b66937bdb68e560e30f25faf8173451d64b23bc888d3"
+    },
+    "docs-updater": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-core/skills/docs-updater/SKILL.md",
+      "computedHash": "980123e630f0376f297059f754c8f079c972593384aba4870b37133a7d3fdaf5"
+    },
+    "drawio-logical-diagrams": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-core/skills/drawio-logical-diagrams/SKILL.md",
+      "computedHash": "cc9be80cb2718b656378763bf429332922445026f3e30809c56b7229636e2ae6"
+    },
+    "drizzle-orm-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/drizzle-orm-patterns/SKILL.md",
+      "computedHash": "d63e6d73a9f579b505a5694af2f3b3200c2b5eeea147e88b9b6d1e5fce23bcbb"
+    },
+    "dynamodb-toolbox-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/dynamodb-toolbox-patterns/SKILL.md",
+      "computedHash": "0cc75ec787c0bc3ed7f53e0b545935d42307ff7e3623a40a66efac068e8831b7"
+    },
+    "gemini": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-tools/skills/gemini/SKILL.md",
+      "computedHash": "805f864c284b6e92e961e8c507e5645b94e8cfc280d0e5b3f9b07bd673eeff50"
+    },
+    "github-issue-workflow": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-core/skills/github-issue-workflow/SKILL.md",
+      "computedHash": "504d8edeccba7fcbb5a60a6dcad8593e542fac3f8d58b97696df90cf36a708bd"
+    },
+    "graalvm-native-image": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/graalvm-native-image/SKILL.md",
+      "computedHash": "4fdb4cb77a697237d2914bbaa791d443a426b1c0f148b110eda7a2d553563f49"
+    },
+    "knowledge-graph": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-specs/skills/knowledge-graph/SKILL.md",
+      "computedHash": "c4d4300136fdc459f4e48e71943ec7803ee9eb4c002ad4f14095d6d50e774626"
+    },
+    "langchain4j-ai-services-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/langchain4j-ai-services-patterns/SKILL.md",
+      "computedHash": "c014d6764ac194342cec2b46031e699b9a3e3ff4eff4873ff830127f4cef85ae"
+    },
+    "langchain4j-mcp-server-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/langchain4j-mcp-server-patterns/SKILL.md",
+      "computedHash": "ee8892a958f1700fa095a7615ba0ccab654788d00d3c958be54e620da2692337"
+    },
+    "langchain4j-rag-implementation-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/langchain4j-rag-implementation-patterns/SKILL.md",
+      "computedHash": "e73259d6ff44a2d10c50bc511bdb6428163b9d554e404cff57f3445e8f521b16"
+    },
+    "langchain4j-spring-boot-integration": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/langchain4j-spring-boot-integration/SKILL.md",
+      "computedHash": "d67839840965561d7ccac03c82a6707b1e214e15551f6d8f3586e62f40d232e5"
+    },
+    "langchain4j-testing-strategies": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/langchain4j-testing-strategies/SKILL.md",
+      "computedHash": "84e2462c4d01013fb913a39247a94e4a66ae8bc85efb00367007dbfcfa3636de"
+    },
+    "langchain4j-tool-function-calling-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/langchain4j-tool-function-calling-patterns/SKILL.md",
+      "computedHash": "b407889a9946c9a8d8e61de387af37a0088a4b795f39a0aeb04bcc0fa5c7cee6"
+    },
+    "langchain4j-vector-stores-configuration": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/langchain4j-vector-stores-configuration/SKILL.md",
+      "computedHash": "d9a1a80c98d5f26675dcaf230dc5c02a97c1dc7f795eca84dee5643698ae0135"
+    },
+    "learn": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-core/skills/learn/SKILL.md",
+      "computedHash": "c8a11e67958e2f5ceccf65ec5de8588823d360279f83f1b7e305326adbc44729"
+    },
+    "memory-md-management": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-core/skills/memory-md-management/SKILL.md",
+      "computedHash": "1b11a00079df4ee25e3cb4abb45be296d32794a2a7612f2aaf762cbd2e2c25b0"
+    },
     "nestjs": {
       "source": "giuseppe-trisciuoglio/developer-kit",
       "sourceType": "github",
@@ -8,10 +254,22 @@
       "computedHash": "1f4f0018bfe49da4fbbcf887208e1d67711f38059684b6bc3fa7c849ab2f8c16"
     },
     "nestjs-best-practices": {
-      "source": "kadajett/agent-nestjs-skills",
+      "source": "giuseppe-trisciuoglio/developer-kit",
       "sourceType": "github",
-      "skillPath": "SKILL.md",
-      "computedHash": "1b6f82e889d19d305e38e35594de08eca0242321f353cafa4cf5e61dd3aa1a73"
+      "skillPath": "plugins/developer-kit-typescript/skills/nestjs-best-practices/SKILL.md",
+      "computedHash": "9ae7ebfb5494452a9496462c4886fd8763e6f8dfa6e506efca7502c0529add2c"
+    },
+    "nestjs-code-review": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/nestjs-code-review/SKILL.md",
+      "computedHash": "745bd6ee3a31f2c57d52777b63de0e598966fbf206dbe65c063a7c41862e4fdb"
+    },
+    "nestjs-drizzle-crud-generator": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/nestjs-drizzle-crud-generator/SKILL.md",
+      "computedHash": "30c0494e7f7179dd0b7ac41550bb8c688574ce0ff30e785a41adae6329fb70c7"
     },
     "nestjs-expert": {
       "source": "sickn33/antigravity-awesome-skills",
@@ -25,6 +283,204 @@
       "skillPath": "skills/nestjs-patterns/SKILL.md",
       "computedHash": "0ff35d7a72bb462f51629b38dcb525ab0368ff755cbd1cf121c144e7d05f12a1"
     },
+    "nextjs-app-router": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/nextjs-app-router/SKILL.md",
+      "computedHash": "59651cf76c1a5a7704ea71ec275f98f702623ceb7bcf2ab2e093802ac6b81104"
+    },
+    "nextjs-authentication": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/nextjs-authentication/SKILL.md",
+      "computedHash": "f237aeab71b4ca34699c91d83d82505c7db0d003997e4bdd3dc99ed10c564cbc"
+    },
+    "nextjs-code-review": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/nextjs-code-review/SKILL.md",
+      "computedHash": "859a556486183d25d3dd5f41526bf034b868eb02e13a7f881ed2d48014e94ecf"
+    },
+    "nextjs-data-fetching": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/nextjs-data-fetching/SKILL.md",
+      "computedHash": "3a82ef614a13d4ae78321e6834f8fc334510e20f8e605a7b542bfba2e9be9dab"
+    },
+    "nextjs-deployment": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/nextjs-deployment/SKILL.md",
+      "computedHash": "f4a4b490893df14bc34b890f6c57c0b932a4b25efb10c5b1da1ae5c57a789890"
+    },
+    "nextjs-performance": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/nextjs-performance/SKILL.md",
+      "computedHash": "ea2ac97c0f3a5afe4d0196969840d383a30882b8e00a4da895e4ea6eaa32af09"
+    },
+    "notebooklm": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-tools/skills/notebooklm/SKILL.md",
+      "computedHash": "8605679ee7737c2d9dca9336317850114ecd9d582402539eaa3dadc468ed1094"
+    },
+    "nx-monorepo": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/nx-monorepo/SKILL.md",
+      "computedHash": "50c6887ae2f141f1a47c0a791ba69df474b517ef6d1b04e89b4bb7dbaf8f9b42"
+    },
+    "prompt-engineering": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-ai/skills/prompt-engineering/SKILL.md",
+      "computedHash": "f67e9894b11492c03fb3c82d10cf59b8894aaac51e95b6241e077e33847aa36d"
+    },
+    "qdrant": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/qdrant/SKILL.md",
+      "computedHash": "24435e951c7dc3c8fc7562a120b6bbe908e6df772bec26f6e5f8c89d1eb79763"
+    },
+    "qwen-coder": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-tools/skills/qwen-coder/SKILL.md",
+      "computedHash": "7573bcd10ee73c1592e026802b9ab4f1ac39196ab85c949ff891c6b39a08a3cd"
+    },
+    "rag": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-ai/skills/rag/SKILL.md",
+      "computedHash": "0659f2058a523bf6daa5e58296dc12cac32d7176fb35e03c31f90fa7bc48d798"
+    },
+    "ralph-loop": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-specs/skills/ralph-loop/SKILL.md",
+      "computedHash": "44fc3440593e37c913809ebb7a925f52964ea78a93baa1f0c7a464b85bed1e3b"
+    },
+    "react-code-review": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/react-code-review/SKILL.md",
+      "computedHash": "3a6ca3a1755850a7d1de17314ecd431be724fe85ad33ef2ac2bbfe658244414a"
+    },
+    "react-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/react-patterns/SKILL.md",
+      "computedHash": "15f7299cfc3708d572db2e813b22af39f4284cbab9a824f518556b21131b198a"
+    },
+    "shadcn-ui": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/shadcn-ui/SKILL.md",
+      "computedHash": "a2c4e57faab8e31f3df91156edf2df1a5a7f6c242249b2d86ca11336c9183157"
+    },
+    "sonarqube-mcp": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-tools/skills/sonarqube-mcp/SKILL.md",
+      "computedHash": "9f1a35541258f286218e04d2ab8a2df7aa8ed45e4db8d3b932eef3fb09943492"
+    },
+    "specs-code-cleanup": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-specs/skills/specs-code-cleanup/SKILL.md",
+      "computedHash": "5ec5f3af595fc4d1fa02bd9639fe2488bd08ce1ee9e7cfab1e05b65b36c734e9"
+    },
+    "spring-ai-mcp-server-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-ai-mcp-server-patterns/SKILL.md",
+      "computedHash": "791513be92f50bc3a927ab7072b24f0dea8f6281bf6c745d75f2e202334b853a"
+    },
+    "spring-boot-actuator": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-actuator/SKILL.md",
+      "computedHash": "7741df5991f5ce490652a1dee2471a8e41e11e6282b84b7814ae06b0f59448a0"
+    },
+    "spring-boot-cache": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-cache/SKILL.md",
+      "computedHash": "46de281bd90f33c35d20e702f0c18978c37755c6c7bc9132722bdead42b174d0"
+    },
+    "spring-boot-crud-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-crud-patterns/SKILL.md",
+      "computedHash": "db06e4b4c44dbfd223771b434006f09d1791f0c2cec1e8e459742e0d0b1fbf9c"
+    },
+    "spring-boot-dependency-injection": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-dependency-injection/SKILL.md",
+      "computedHash": "f205c2e439ae70db6bb59f79fcd8dbca32f4febcf9b8df8bb1d047de650ed91d"
+    },
+    "spring-boot-event-driven-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-event-driven-patterns/SKILL.md",
+      "computedHash": "5614e5f7f2485af5a0bd64f3f3280ea70ce6b8162f09a626f3c183cc12450b27"
+    },
+    "spring-boot-openapi-documentation": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-openapi-documentation/SKILL.md",
+      "computedHash": "b05be6d8a048c33e6ff3f8740a776d3cd31568ef9aad8265a41455ace989718f"
+    },
+    "spring-boot-project-creator": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-project-creator/SKILL.md",
+      "computedHash": "c080ba35d713a7c658eb8ee54fe21a15e58db0ada560947ef21003266f9a12c8"
+    },
+    "spring-boot-resilience4j": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-resilience4j/SKILL.md",
+      "computedHash": "4083c0dc19a02e598b1703d1e9b3fcf29b69cf306712157599bba5a9730a7906"
+    },
+    "spring-boot-rest-api-standards": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-rest-api-standards/SKILL.md",
+      "computedHash": "64cdf48d3045aaea5108a0d125d4193dc0cbf70804a37cd0d07d17a4851c1414"
+    },
+    "spring-boot-saga-pattern": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-saga-pattern/SKILL.md",
+      "computedHash": "5aee1fdf7697237cb6ea893d9c317849d4d04cad5c1640a9b680c59c4727df57"
+    },
+    "spring-boot-security-jwt": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-security-jwt/SKILL.md",
+      "computedHash": "ed40cb6fd4928fe83151c1cfad59e37afcf1557d7b31247c4d09022e9159ef53"
+    },
+    "spring-boot-test-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-boot-test-patterns/SKILL.md",
+      "computedHash": "8c2a847c1b9e5c1652545106e385a31683915e35f15e2ef862cadbe073aadcfc"
+    },
+    "spring-data-jpa": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-data-jpa/SKILL.md",
+      "computedHash": "be931b019eabb76dcdb72620f982997e6e6b4b942e794a797c1afe02e59aa592"
+    },
+    "spring-data-neo4j": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/spring-data-neo4j/SKILL.md",
+      "computedHash": "5bc75948a61c06d49bd36bc4f43010a87c1b55b8e2874deb90cf51444f026c37"
+    },
     "supabase": {
       "source": "supabase/agent-skills",
       "sourceType": "github",
@@ -36,6 +492,138 @@
       "sourceType": "github",
       "skillPath": "skills/supabase-postgres-best-practices/SKILL.md",
       "computedHash": "292c93e5a86e2429204bc37abe26b3c9023c4760eb02418462887f2082f118ce"
+    },
+    "tailwind-css-patterns": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/tailwind-css-patterns/SKILL.md",
+      "computedHash": "6092620c3af955a46ea2b94ca8a40197ac8392e6bbdc8c7515659328b186c770"
+    },
+    "tailwind-design-system": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/tailwind-design-system/SKILL.md",
+      "computedHash": "fccc3f5d3e026ddc6a4dd41d57808ba5c9636ecff6eff0368fa4619aa89993c6"
+    },
+    "turborepo-monorepo": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/turborepo-monorepo/SKILL.md",
+      "computedHash": "dd24a9f0e1ba7586ca6ce85732b6f3388d2c2760307d4316596ab0cb155f8173"
+    },
+    "typescript-docs": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/typescript-docs/SKILL.md",
+      "computedHash": "9e2c39b8a9ea569feb0c90080b10a71371e2d2d8ffb35de4fc5f7afe2a442f67"
+    },
+    "typescript-security-review": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/typescript-security-review/SKILL.md",
+      "computedHash": "964df9f841a2afb2114639662fcf6a85e2ad5ee705fe46b99f462aa331defaee"
+    },
+    "unit-test-application-events": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-application-events/SKILL.md",
+      "computedHash": "7779cb6182f7afca8b948516c4748878957a01e6d4359e719a96a8d934ac8461"
+    },
+    "unit-test-bean-validation": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-bean-validation/SKILL.md",
+      "computedHash": "2eaed25096c921d9dd7d96f7bc2536ae2645255ffedd773752b81b871066416f"
+    },
+    "unit-test-boundary-conditions": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-boundary-conditions/SKILL.md",
+      "computedHash": "a19b65853df56b1de36fc3a008691e92b1a654d0e2c8dfcd2a823492fbcf6f65"
+    },
+    "unit-test-caching": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-caching/SKILL.md",
+      "computedHash": "6eda196627507fd387c3e5b2c4ba461393c525e53c48447725b10b31345fb149"
+    },
+    "unit-test-config-properties": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-config-properties/SKILL.md",
+      "computedHash": "f79fa8d72a723919f46f9b60c00b505688b93fc89220c6af90a24e83385174e4"
+    },
+    "unit-test-controller-layer": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-controller-layer/SKILL.md",
+      "computedHash": "dd99f0b9ad568d187f79396448b3409f9482b45e2f096083c74bf9cf54c987b5"
+    },
+    "unit-test-exception-handler": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-exception-handler/SKILL.md",
+      "computedHash": "5d7c7b0f699101fd8dfb4c7e9a4cbbc86d3fd4fd922e412e60a3e3a50eddc7c9"
+    },
+    "unit-test-json-serialization": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-json-serialization/SKILL.md",
+      "computedHash": "f239ec36503816c28237fcc02fe12b666364337843a8b7088550a5d4ccf13e61"
+    },
+    "unit-test-mapper-converter": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-mapper-converter/SKILL.md",
+      "computedHash": "1e6e351eb6aefdc64ea8d1ee8d35f3888b925a1439063d2261b2bd6139758e24"
+    },
+    "unit-test-parameterized": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-parameterized/SKILL.md",
+      "computedHash": "3b43747a83bb47ca8dde9f2b9e555fd0cbae0e575ae6b796bc4abdca8674ef71"
+    },
+    "unit-test-scheduled-async": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-scheduled-async/SKILL.md",
+      "computedHash": "bf3ddbd2246aef53bce7f040c827303cda8629e531c7bb69ecfa8ed5bf39e17c"
+    },
+    "unit-test-security-authorization": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-security-authorization/SKILL.md",
+      "computedHash": "d33ab489cf4358ad3e372d643e6523b578ca3eae629ba7232db17bc80aa96479"
+    },
+    "unit-test-service-layer": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-service-layer/SKILL.md",
+      "computedHash": "e24d6b55c360cf55b8564a6ccc7bb743d83306db22ae6ec48d00a0ccc31cc898"
+    },
+    "unit-test-utility-methods": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-utility-methods/SKILL.md",
+      "computedHash": "a73711c9bdbd4b301a91d3c3edd654676e7166348010e139dbf434ce063aba9e"
+    },
+    "unit-test-wiremock-rest-api": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/unit-test-wiremock-rest-api/SKILL.md",
+      "computedHash": "e9cd52018c3b66e11ddc5fb13b044782483b002a8021c8960202663b61607568"
+    },
+    "wiremock-standalone-docker": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-java/skills/wiremock-standalone-docker/SKILL.md",
+      "computedHash": "8cf9081a66f2ad32774e74757f8bfe9ce95f1c2e3059014a242873fac49ddd75"
+    },
+    "zod-validation-utilities": {
+      "source": "giuseppe-trisciuoglio/developer-kit",
+      "sourceType": "github",
+      "skillPath": "plugins/developer-kit-typescript/skills/zod-validation-utilities/SKILL.md",
+      "computedHash": "9785b925118b719c6f2c34b3d1fb2052a272d2efee4853ced86b8d6be5a7b061"
     }
   }
 }
