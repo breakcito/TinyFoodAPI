@@ -61,7 +61,9 @@ export class AuthGateway {
       const response = await UC_Registrar.execute({
         id_supabase: payload.id_supabase,
         nombre: payload.nombre as string,
-        url_foto: payload.urlFoto!,
+        url_foto: payload.urlFoto,
+        foto_b64: payload.foto_b64,
+        genero: payload.genero,
         peso: payload.peso,
         talla: payload.talla,
         fecha_nacimiento: payload.fecha_nacimiento,
@@ -69,6 +71,7 @@ export class AuthGateway {
         informacion_medica: payload.informacion_medica,
         alimentos_prohibidos: payload.alimentos_prohibidos,
         preferencias: payload.preferencias,
+        objetivo_fisico: payload.objetivo_fisico,
       });
 
       if (response.success) {

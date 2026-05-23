@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { UserGateway } from './presentation/user.gateway';
+import './presentation/user.gateway';
+import { SupabaseStorageService } from '../../common/service/supabase-storage.service';
 
-@Module({})
-export class UserModule {
-  constructor() {
-    // Inicializa el gateway para registrar los eventos en el Dispatcher
-    UserGateway;
-  }
-}
+@Module({
+  providers: [SupabaseStorageService],
+})
+export class UserModule {}

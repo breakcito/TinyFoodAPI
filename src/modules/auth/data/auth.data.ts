@@ -1,3 +1,5 @@
+import { Genero } from 'src/common/utils/enums/genero';
+import { ObjetivoFisico } from 'src/common/utils/enums/objetivo-fisico.enum';
 import { PrismaService } from '../../../common/service/prisma.service';
 
 export class AuthData {
@@ -15,12 +17,14 @@ export class AuthData {
     id_supabase: string;
     nombre: string;
     url_foto?: string | null;
+    genero: Genero;
     peso?: number;
     talla?: number;
     fecha_nacimiento?: Date;
     nivel_actividad?: number;
     informacion_medica?: { nombre: string; descripcion?: string }[];
     alimentos_prohibidos?: string[];
+    objetivo_fisico?: ObjetivoFisico | null;
     preferencias?: string[];
   }) {
     return PrismaService.db.usuario.create({
@@ -30,10 +34,12 @@ export class AuthData {
         url_foto: payload.url_foto,
         peso: payload.peso,
         talla: payload.talla,
+        genero: payload.genero,
         fecha_nacimiento: payload.fecha_nacimiento,
         nivel_actividad: payload.nivel_actividad,
         informacion_medica: payload.informacion_medica,
         alimentos_prohibidos: payload.alimentos_prohibidos,
+        objetivo_fisico: payload.objetivo_fisico,
         preferencias: payload.preferencias,
       },
     });

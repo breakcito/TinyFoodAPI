@@ -24,7 +24,7 @@ export class UserGateway {
       await validateOrReject(payload);
 
       return await UC_ActualizarPerfil.execute(
-        client.usuario.id, // ID interno del usuario ya autenticado
+        client.usuario, // Pasar el objeto usuario de la base de datos completo
         payload,
       );
     } catch (error) {

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Genero } from 'src/common/utils/enums/genero';
+import { ObjetivoFisico } from 'src/common/utils/enums/objetivo-fisico.enum';
 import { PrismaService } from '../../../common/service/prisma.service';
 
 interface Condicion {
@@ -17,13 +19,17 @@ export class UserData {
   static async actualizarPerfil(
     id: number,
     payload: {
+      nombre?: string;
+      url_foto?: string | null;
       peso?: number;
       talla?: number;
       fecha_nacimiento?: Date;
+      genero?: Genero;
       nivel_actividad?: number;
       informacion_medica?: Condicion[];
       alimentos_prohibidos?: string[];
       preferencias?: string[];
+      objetivo_fisico?: ObjetivoFisico;
     },
   ) {
     return PrismaService.db.usuario.update({

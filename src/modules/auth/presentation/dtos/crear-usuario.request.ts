@@ -7,8 +7,11 @@ import {
   IsArray,
   ValidateNested,
   IsUrl,
+  IsEnum,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { Genero } from 'src/common/utils/enums/genero';
+import { ObjetivoFisico } from 'src/common/utils/enums/objetivo-fisico.enum';
 
 export class InfoMedicaDto {
   @IsString()
@@ -25,9 +28,17 @@ export class REQ_CrearUsuario {
   @IsOptional()
   nombre?: string;
 
+  @IsString()
+  @IsOptional()
+  foto_b64?: string;
+
   @IsDateString()
   @IsOptional()
   fecha_nacimiento?: string;
+
+  @IsEnum(Genero)
+  @IsNotEmpty()
+  genero: Genero;
 
   @IsNumber()
   @IsOptional()
@@ -56,6 +67,10 @@ export class REQ_CrearUsuario {
   @IsString({ each: true })
   @IsOptional()
   preferencias?: string[];
+
+  @IsEnum(ObjetivoFisico)
+  @IsOptional()
+  objetivo_fisico?: ObjetivoFisico;
 }
 
 // Estos datos no los envia el front, pero son insertados desde el backend

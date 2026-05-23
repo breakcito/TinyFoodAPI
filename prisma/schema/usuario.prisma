@@ -2,14 +2,20 @@ model usuario {
   id                   Int       @id @default(autoincrement())
   id_supabase          String    @unique @db.Uuid
   nombre               String
-  url_foto             String?
-  peso                 Decimal?  @db.Decimal
-  talla                Decimal?  @db.Decimal
-  fecha_nacimiento     DateTime? @db.Date
-  nivel_actividad      Int?      @default(1)
-  informacion_medica   Json?
-  alimentos_prohibidos String[]
-  preferencias         String[]
+  url_foto             String? // apunta a la url de google o del bucket de supabase
+  fecha_nacimiento     DateTime? @db.Date // se guarda como: año - mes - dia
+  genero               String // 'masculino', 'femenino', 'otro'
+  //
+  peso                 Decimal?  @db.Decimal // en kg
+  talla                Decimal?  @db.Decimal // en centimetros
+  //
+  nivel_actividad      Int?      @default(1) // el 1 al 5
+  informacion_medica   Json? // [{"nombre": "", "descripcion": ""},...]
+  //
+  alimentos_prohibidos String[] // ['platano', 'nuez', ...]
+  preferencias         String[] // ['pollo frito', 'torta de chotolatep', ...]
+  objetivo_fisico      String?   // 'mantener', 'perder peso', 'ganar peso', ...
+  //
   created_at           DateTime  @default(now()) @db.Timestamptz
   // Relaciones
   // 1 - N
