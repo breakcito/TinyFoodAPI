@@ -3,15 +3,20 @@ import { Dispatcher } from 'src/common/presentation/dispatcher';
 import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { SendResponse } from 'src/common/utils/functions/api-response';
+ 
 import { UC_RegistrarComida } from '../logic/registro-comida.uc';
 import { UC_ListarComida } from '../logic/listar-comida.uc';
 import { UC_ActualizarComida } from '../logic/actualizar-comida.uc';
 import { UC_EliminarComida } from '../logic/eliminar-comida.uc';
+import { UC_AnalizarImagen } from '../logic/analizar-imagen.uc';
+ 
 import { REQ_RegistrarComida } from './dtos/registrar-comida.request';
 import { REQ_ActualizarComida } from './dtos/actualizar-comida.request';
+import { REQ_AnalizarImagen } from './dtos/analizar-imagen.request';
 
 export class DespensaGateway {
   static register() {
+    // ── CRUD de alimentos 
     Dispatcher.registerPrivate({
       'despensa:listar_comida': (client) =>
         DespensaGateway.listarComida(client as AuthSocket),
@@ -32,6 +37,12 @@ export class DespensaGateway {
         DespensaGateway.eliminarComida(
           client as AuthSocket,
           data as { id: number },
+        ),
+        // ── IA: Análisis de imagen 
+      'despensa:analizar_imagen': (client, data) =>
+        DespensaGateway.analizarImagen(
+          client as AuthSocket,
+          data as REQ_AnalizarImagen,
         ),
     });
   }
@@ -77,6 +88,23 @@ export class DespensaGateway {
     } catch (error) {
       console.error('[DespensaGateway] Error al eliminar comida:', error);
       return SendResponse.error('Error al eliminar alimento');
+    }
+  }
+  //IA
+  static async analizarImagen(client: AuthSocket, data: REQ_AnalizarImagen) {
+    try {
+      if (!client.usuario) return SendResponse.error('Usuario no autenticado');
+ 
+      const payload = plainToInstance(REQ_AnalizarImagen, data);
+      await validateOrReject(payload);
+ 
+      return await UC_AnalizarImagen.execute(
+        payload.foto_b64!,
+        payload.mime_type ?? 'image/jpeg',
+      );
+    } catch (error) {
+      console.error('[DespensaGateway] Error al analizar imagen:', error);
+      return SendResponse.error('Error al procesar la imagen');
     }
   }
 }
