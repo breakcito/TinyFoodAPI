@@ -30,6 +30,7 @@ export class UserData {
       alimentos_prohibidos?: string[];
       preferencias?: string[];
       objetivo_fisico?: ObjetivoFisico;
+      configuracion?: Record<string, any>;
     },
   ) {
     return PrismaService.db.usuario.update({

@@ -11,6 +11,7 @@ model usuario {
   //
   nivel_actividad      Int?      @default(1) // el 1 al 5
   informacion_medica   Json? // [{"nombre": "", "descripcion": ""},...]
+  configuracion        Json?     @default("{}") // preferencias de cocina e IA
   //
   alimentos_prohibidos String[] // ['platano', 'nuez', ...]
   preferencias         String[] // ['pollo frito', 'torta de chotolatep', ...]

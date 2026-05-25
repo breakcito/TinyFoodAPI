@@ -26,6 +26,7 @@ export class UC_ActualizarPerfil {
       preferencias?: string[];
       fecha_nacimiento?: string;
       objetivo_fisico?: ObjetivoFisico;
+      configuracion?: Record<string, any>;
     },
   ): Promise<ApiResponse> {
     try {
@@ -65,6 +66,7 @@ export class UC_ActualizarPerfil {
         alimentos_prohibidos: data.alimentos_prohibidos,
         preferencias: data.preferencias,
         objetivo_fisico: data.objetivo_fisico,
+        configuracion: data.configuracion,
       });
 
       return SendResponse.success(

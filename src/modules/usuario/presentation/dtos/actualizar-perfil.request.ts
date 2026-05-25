@@ -8,6 +8,7 @@ import {
   ValidateNested,
   IsDateString,
   IsEnum,
+  IsObject,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Genero } from 'src/common/utils/enums/genero';
@@ -75,4 +76,8 @@ export class REQ_ActualizarPerfil {
   @IsEnum(ObjetivoFisico)
   @IsOptional()
   objetivo_fisico?: ObjetivoFisico;
+
+  @IsObject()
+  @IsOptional()
+  configuracion?: Record<string, any>;
 }
