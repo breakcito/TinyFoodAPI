@@ -1,12 +1,13 @@
-// Servicio centralizado de Gemini. Compatible con la inyección de dependencias de NestJS. Todos los casos de uso acceden vía GeminiService.instance.
+// Servicio de IA centralizado. Usa Groq como proveedor (gratis, sin tarjeta).
 
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GoogleGenAI, Part, Type } from '@google/genai';
+import Groq from 'groq-sdk';
 
-const MODEL = 'gemini-2.0-flash';
-
-// ── Tipos legacy (se mantienen para no romper código existente) ───────────────
+// Modelo para texto puro
+const MODEL_TEXT = 'llama-3.3-70b-versatile';
+// Modelo para imágenes (vision)
+const MODEL_VISION = 'meta-llama/llama-4-scout-17b-16e-instruct';
 export interface FoodItem {
   name: string;
   category: string;
@@ -15,142 +16,107 @@ export interface FoodItem {
 
 @Injectable()
 export class GeminiService {
-  /** Instancia estática para acceso desde casos de uso sin inyección */
   static instance: GeminiService;
-
-  private ai: GoogleGenAI;
+  private groq: Groq;
 
   constructor(private configService: ConfigService) {
     GeminiService.instance = this;
 
-    const apiKey = this.configService.get<string>('GEMINI_API_KEY');
+    const apiKey = this.configService.get<string>('GROQ_API_KEY');
     if (!apiKey) {
-      console.warn(
-        '[GeminiService] GEMINI_API_KEY no encontrada. Agrégala en el .env',
-      );
+      console.warn('[GeminiService] GROQ_API_KEY no encontrada. Agrégala en el .env');
     }
-    this.ai = new GoogleGenAI({ apiKey: apiKey || '' });
+    this.groq = new Groq({ apiKey: apiKey || '' });
   }
 
-  // ─── Método genérico: solo texto ──────────────────────────────────────────
-
-  /**
-   * Genera una respuesta JSON estructurada a partir de un prompt de texto.
-   *
-   * @param prompt - Instrucción completa (debe describir el schema esperado).
-   * @returns      - Objeto tipado T.
-   */
   async generate<T>(prompt: string): Promise<T> {
     try {
-      const response = await this.ai.models.generateContent({
-        model: MODEL,
-        contents: [{ role: 'user', parts: [{ text: prompt }] }],
-        config: {
-          responseMimeType: 'application/json',
-        },
+      const completion = await this.groq.chat.completions.create({
+        model: MODEL_TEXT,
+        messages: [
+          {
+            role: 'system',
+            content: 'Eres un asistente que responde ÚNICAMENTE con JSON válido, sin texto adicional, sin markdown, sin bloques de código.',
+          },
+          {
+            role: 'user',
+            content: prompt,
+          },
+        ],
+        temperature: 0.7,
+        max_tokens: 1024,
+        response_format: { type: 'json_object' },
       });
 
-      return this.parseResponse<T>(response.text ?? '');
+      const raw = completion.choices[0]?.message?.content ?? '{}';
+      return this.parseResponse<T>(raw);
     } catch (error) {
       console.error('[GeminiService] Error en generate():', error);
-      throw new InternalServerErrorException(
-        'Error al procesar la solicitud con IA.',
-      );
+      throw new Error('Error al procesar la solicitud con IA.');
     }
   }
 
   // ─── Método genérico: imagen + texto ──────────────────────────────────────
 
-  /**
-   * Genera una respuesta JSON estructurada a partir de una imagen (base64)
-   * más un prompt descriptivo.
-   *
-   * @param foto_b64  - Imagen en base64 (con o sin prefijo data:image/...).
-   * @param mimeType  - Tipo MIME de la imagen. Default: 'image/jpeg'.
-   * @param prompt    - Instrucción para Gemini sobre qué analizar.
-   * @returns         - Objeto tipado T.
-   */
   async generateFromImage<T>(
     foto_b64: string,
     mimeType: string = 'image/jpeg',
     prompt: string,
   ): Promise<T> {
-     console.log('[GeminiService] API Key (primeros 30 chars):', 
-    this.ai['apiKey']?.substring(0, 30) ?? 'NO KEY');
     try {
+      // Limpiar prefijo data:image/...;base64, si viene incluido
       const base64Clean = foto_b64.includes(',')
         ? foto_b64.split(',')[1]
         : foto_b64;
 
-      const parts: Part[] = [
-        {
-          inlineData: {
-            mimeType,
-            data: base64Clean,
-          },
-        },
-        { text: prompt },
-      ];
+      const dataUrl = `data:${mimeType};base64,${base64Clean}`;
 
-      const response = await this.ai.models.generateContent({
-        model: MODEL,
-        contents: [{ role: 'user', parts }],
-        config: {
-          responseMimeType: 'application/json',
-        },
+      const completion = await this.groq.chat.completions.create({
+        model: MODEL_VISION,
+        messages: [
+          {
+            role: 'system',
+            content: 'Eres un asistente que responde ÚNICAMENTE con JSON válido, sin texto adicional, sin markdown, sin bloques de código.',
+          },
+          {
+            role: 'user',
+            content: [
+              {
+                type: 'image_url',
+                image_url: { url: dataUrl },
+              },
+              {
+                type: 'text',
+                text: prompt,
+              },
+            ],
+          },
+        ],
+        temperature: 0.4,
+        max_tokens: 1024,
       });
 
-      return this.parseResponse<T>(response.text ?? '');
+      const raw = completion.choices[0]?.message?.content ?? '{}';
+      return this.parseResponse<T>(raw);
     } catch (error) {
       console.error('[GeminiService] Error en generateFromImage():', error);
-      throw new InternalServerErrorException(
-        'No pudimos procesar la imagen con IA.',
-      );
+      throw new Error('No pudimos procesar la imagen con IA.');
     }
   }
 
-  // ─── Método legacy (mantenido para compatibilidad) ────────────────────────
-
-  /** @deprecated Usa generateFromImage<T>() en su lugar. */
   async analyzeFoodImage(imageBase64: string): Promise<FoodItem[]> {
     try {
-      const base64Data = imageBase64.replace(/^data:image\/\w+;base64,/, '');
-
-      const response = await this.ai.models.generateContent({
-        model: MODEL,
-        contents: [
-          'Analiza esta imagen e identifica todos los alimentos posibles. Para cada uno, indica el nombre, categoría (fruta, vegetal, envasado, carne, etc) y una estimación de cantidad. Devuelve estrictamente el JSON esperado.',
-          {
-            inlineData: {
-              mimeType: 'image/jpeg',
-              data: base64Data,
-            },
-          },
-        ],
-        config: {
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                name: { type: Type.STRING },
-                category: { type: Type.STRING },
-                quantity: { type: Type.STRING },
-              },
-            },
-          },
-        },
-      });
-
-      const responseText = response.text || '[]';
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-      return JSON.parse(responseText);
+      const result = await this.generateFromImage<{ items: FoodItem[] }>(
+        imageBase64,
+        'image/jpeg',
+        `Analiza esta imagen e identifica todos los alimentos posibles.
+Para cada uno indica nombre, categoría (fruta, vegetal, envasado, carne, etc) y cantidad estimada.
+Devuelve: { "items": [{ "name": "", "category": "", "quantity": "" }] }`,
+      );
+      return result.items ?? [];
     } catch (error) {
       console.error('[GeminiService] Error en analyzeFoodImage():', error);
-      throw new InternalServerErrorException(
-        'No pudimos procesar la imagen con IA.',
-      );
+      throw new Error('No pudimos procesar la imagen con IA.');
     }
   }
 
@@ -162,13 +128,10 @@ export class GeminiService {
         .replace(/```json\s*/gi, '')
         .replace(/```\s*/gi, '')
         .trim();
-
       return JSON.parse(clean) as T;
     } catch {
       console.error('[GeminiService] Error al parsear respuesta:', raw);
-      throw new InternalServerErrorException(
-        'La IA devolvió una respuesta en formato inesperado.',
-      );
+      throw new Error('La IA devolvió una respuesta en formato inesperado.');
     }
   }
 }
