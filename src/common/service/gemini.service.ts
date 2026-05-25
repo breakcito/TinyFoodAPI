@@ -24,7 +24,9 @@ export class GeminiService {
 
     const apiKey = this.configService.get<string>('GROQ_API_KEY');
     if (!apiKey) {
-      console.warn('[GeminiService] GROQ_API_KEY no encontrada. Agrégala en el .env');
+      console.warn(
+        '[GeminiService] GROQ_API_KEY no encontrada. Agrégala en el .env',
+      );
     }
     this.groq = new Groq({ apiKey: apiKey || '' });
   }
@@ -36,7 +38,8 @@ export class GeminiService {
         messages: [
           {
             role: 'system',
-            content: 'Eres un asistente que responde ÚNICAMENTE con JSON válido, sin texto adicional, sin markdown, sin bloques de código.',
+            content:
+              'Eres un asistente que responde ÚNICAMENTE con JSON válido, sin texto adicional, sin markdown, sin bloques de código.',
           },
           {
             role: 'user',
@@ -76,7 +79,8 @@ export class GeminiService {
         messages: [
           {
             role: 'system',
-            content: 'Eres un asistente que responde ÚNICAMENTE con JSON válido, sin texto adicional, sin markdown, sin bloques de código.',
+            content:
+              'Eres un asistente que responde ÚNICAMENTE con JSON válido, sin texto adicional, sin markdown, sin bloques de código.',
           },
           {
             role: 'user',

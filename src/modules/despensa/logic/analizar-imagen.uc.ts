@@ -15,24 +15,83 @@ interface GeminiAnalisisAlimento {
 // Array maestro de etiquetas — la IA elige las más relevantes
 const TAGS_DISPONIBLES = [
   // Estado y frescura
-  'fresco','maduro','verde','seco','congelado','enlatado','procesado','orgánico','natural',
+  'fresco',
+  'maduro',
+  'verde',
+  'seco',
+  'congelado',
+  'enlatado',
+  'procesado',
+  'orgánico',
+  'natural',
   // Tipo de alimento
-  'fruta','verdura','legumbre','cereal','lácteo','proteína','carne','pescado','mariscos',
-  'huevo','semilla','nuez','aceite','condimento','especia','bebida','snack','dulce','pan',
+  'fruta',
+  'verdura',
+  'legumbre',
+  'cereal',
+  'lácteo',
+  'proteína',
+  'carne',
+  'pescado',
+  'mariscos',
+  'huevo',
+  'semilla',
+  'nuez',
+  'aceite',
+  'condimento',
+  'especia',
+  'bebida',
+  'snack',
+  'dulce',
+  'pan',
   // Características nutricionales
-  'alto en proteína','alto en fibra','alto en vitamina C','rico en potasio','bajo en calorías',
-  'alto en calcio','fuente de hierro','rico en omega-3','antioxidante','bajo en grasa',
+  'alto en proteína',
+  'alto en fibra',
+  'alto en vitamina C',
+  'rico en potasio',
+  'bajo en calorías',
+  'alto en calcio',
+  'fuente de hierro',
+  'rico en omega-3',
+  'antioxidante',
+  'bajo en grasa',
   // Dieta
-  'vegano','vegetariano','sin gluten','sin lactosa','keto','paleo','sin azúcar',
+  'vegano',
+  'vegetariano',
+  'sin gluten',
+  'sin lactosa',
+  'keto',
+  'paleo',
+  'sin azúcar',
   // Preparación
-  'listo para comer','requiere cocción','requiere refrigeración','no perecedero',
+  'listo para comer',
+  'requiere cocción',
+  'requiere refrigeración',
+  'no perecedero',
   // Color (útil para búsqueda)
-  'rojo','verde','amarillo','naranja','morado','blanco','marrón',
+  'rojo',
+  'verde',
+  'amarillo',
+  'naranja',
+  'morado',
+  'blanco',
+  'marrón',
   // Origen
-  'tropical','importado','local','de temporada',
+  'tropical',
+  'importado',
+  'local',
+  'de temporada',
   // Uso culinario
-  'para desayuno','para almuerzo','para cena','para snack','para bebida','para postre',
-  'para ensalada','para sopa','para batido','para horneado',
+  'para desayuno',
+  'para almuerzo',
+  'para cena',
+  'para snack',
+  'para bebida',
+  'para postre',
+  'para ensalada',
+  'para sopa',
+  'para batido',
+  'para horneado',
 ];
 
 export class UC_AnalizarImagen {
@@ -89,7 +148,7 @@ Si no identificas ningún alimento, devuelve el mismo schema con nombre vacío y
       // Convertir array de tags a string separado por coma
       const tagsString = Array.isArray(resultado.tags)
         ? resultado.tags.join(',')
-        : resultado.tags ?? '';
+        : (resultado.tags ?? '');
 
       return SendResponse.success(
         {
@@ -106,7 +165,9 @@ Si no identificas ningún alimento, devuelve el mismo schema con nombre vacío y
       );
     } catch (error) {
       console.error('[UC_AnalizarImagen] Error:', error);
-      return SendResponse.error('Error al analizar la imagen. Intenta nuevamente.');
+      return SendResponse.error(
+        'Error al analizar la imagen. Intenta nuevamente.',
+      );
     }
   }
 }

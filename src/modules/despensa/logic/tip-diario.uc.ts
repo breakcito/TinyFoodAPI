@@ -3,37 +3,76 @@ import { ApiResponse } from '../../../common/logic/dtos/api.response';
 import { SendResponse } from '../../../common/utils/functions/api-response';
 import { ComidaData } from '../data/comida.data';
 import { UserData } from '../../usuario/data/usuario.data';
- 
+
 interface GeminiTipDiario {
   titulo: string;
   consejo: string;
   urgencia: 'alta' | 'media' | 'baja';
   emoji: string;
 }
- 
+
 export class UC_TipDiario {
-  static async execute(id_usuario: number): Promise<ApiResponse> {
+  static async execute(
+    id_usuario: number,
+    dias_caducidad: number = 5,
+  ): Promise<ApiResponse> {
     try {
       const todasLasComidas = await ComidaData.findAllByUserId(id_usuario);
       const usuario = await UserData.findById(id_usuario);
- 
+
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
-      const en5Dias = new Date(hoy);
-      en5Dias.setDate(en5Dias.getDate() + 5);
- 
+      const enLimiteDias = new Date(hoy);
+      enLimiteDias.setDate(enLimiteDias.getDate() + dias_caducidad);
+
       const proximosAVencer = todasLasComidas.filter((c) => {
         if (!c.fecha_vencimiento || c.estado !== 'Por consumir') return false;
         const vence = new Date(c.fecha_vencimiento);
         vence.setHours(0, 0, 0, 0);
-        return vence >= hoy && vence <= en5Dias;
+        return vence >= hoy && vence <= enLimiteDias;
       });
- 
+
       const disponibles = todasLasComidas.filter(
         (c) => c.estado === 'Por consumir',
       );
- 
+
       // ── Contexto del usuario ──────────────────────────────────────────────
+      let configPreferencias = '';
+      if (usuario?.configuracion) {
+        try {
+          const config = (
+            typeof usuario.configuracion === 'string'
+              ? JSON.parse(usuario.configuracion)
+              : usuario.configuracion
+          ) as {
+            dificultad?: string;
+            estilosComida?: string[];
+            equipamiento?: string[];
+          } | null;
+
+          if (config) {
+            const prepDificultad =
+              config.dificultad === 'rapido'
+                ? 'Prefiere recetas rápidas/express de fácil preparación.'
+                : 'Está en Modo Chef (puede preparar recetas más elaboradas y complejas).';
+
+            const estilos = config.estilosComida?.length
+              ? `Estilos de cocina favoritos: ${config.estilosComida.join(', ')}`
+              : '';
+
+            const equipos = config.equipamiento?.length
+              ? `Equipamiento disponible: ${config.equipamiento.join(', ')}`
+              : '';
+
+            configPreferencias = [prepDificultad, estilos, equipos]
+              .filter(Boolean)
+              .join('\n');
+          }
+        } catch (e) {
+          console.error('[UC_TipDiario] Error parsing configuracion:', e);
+        }
+      }
+
       const contextoUsuario = usuario
         ? [
             usuario.objetivo_fisico
@@ -45,16 +84,17 @@ export class UC_TipDiario {
             usuario.preferencias?.length
               ? `Preferencias: ${usuario.preferencias.join(', ')}`
               : null,
+            configPreferencias || null,
           ]
             .filter(Boolean)
             .join('\n')
         : '';
- 
+
       const gemini = GeminiService.instance;
       if (!gemini) return SendResponse.error('Servicio de IA no disponible');
- 
+
       let prompt = '';
- 
+
       if (proximosAVencer.length > 0) {
         // Hay alimentos próximos a vencer — tip de urgencia
         const listaUrgente = proximosAVencer
@@ -66,7 +106,7 @@ export class UC_TipDiario {
             return `- ${c.nombre} (${c.cantidad}) — vence en ${dias} día(s)`;
           })
           .join('\n');
- 
+
         prompt = `
 Eres un asistente nutricional amigable de TinyFood.
  
@@ -91,7 +131,7 @@ Devuelve ÚNICAMENTE este JSON:
           .slice(0, 5)
           .map((c) => `- ${c.nombre} (${c.cantidad})`)
           .join('\n');
- 
+
         prompt = `
 Eres un asistente nutricional amigable de TinyFood.
  
@@ -129,9 +169,9 @@ Devuelve ÚNICAMENTE este JSON:
   "emoji": "emoji motivador relacionado a comida"
 }`.trim();
       }
- 
+
       const resultado = await gemini.generate<GeminiTipDiario>(prompt);
- 
+
       return SendResponse.success(
         {
           titulo: resultado.titulo,
