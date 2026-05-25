@@ -11,11 +11,11 @@ import { EstadoComida } from 'src/common/utils/enums/estado-comida.enum';
 export class REQ_RegistrarComida {
   @IsString()
   @IsNotEmpty()
-  nombre: string;
+  nombre!: string;
 
   @IsString()
   @IsNotEmpty()
-  cantidad: string;
+  cantidad!: string;
 
   @IsString()
   @IsOptional()

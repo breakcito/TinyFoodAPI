@@ -5,6 +5,7 @@ import { PublicGateway } from './common/presentation/gateways/public.gateway';
 import { PrivateGateway } from './common/presentation/gateways/private.gateway';
 import { UserModule } from './modules/usuario/user.module';
 import { DespensaModule } from './modules/despensa/despensa.module';
+import { CommonModule } from './common/common.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -12,6 +13,7 @@ import { AppController } from './app.controller';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    CommonModule,
     AuthModule,
     UserModule,
     DespensaModule,

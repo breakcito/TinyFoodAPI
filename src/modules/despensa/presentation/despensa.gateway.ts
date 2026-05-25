@@ -3,38 +3,48 @@ import { Dispatcher } from 'src/common/presentation/dispatcher';
 import { plainToInstance } from 'class-transformer';
 import { validateOrReject } from 'class-validator';
 import { SendResponse } from 'src/common/utils/functions/api-response';
+
 import { UC_RegistrarComida } from '../logic/registro-comida.uc';
 import { UC_ListarComida } from '../logic/listar-comida.uc';
 import { UC_ActualizarComida } from '../logic/actualizar-comida.uc';
 import { UC_EliminarComida } from '../logic/eliminar-comida.uc';
+import { UC_AnalizarImagen } from '../logic/analizar-imagen.uc';
+import { UC_TipDiario } from '../logic/tip-diario.uc';
+import { UC_RecomendarRecetas } from '../logic/recomendar-recetas.uc';
+
 import { REQ_RegistrarComida } from './dtos/registrar-comida.request';
 import { REQ_ActualizarComida } from './dtos/actualizar-comida.request';
+import { REQ_AnalizarImagen } from './dtos/analizar-imagen.request';
 
 export class DespensaGateway {
   static register() {
     Dispatcher.registerPrivate({
+      //CRUD 
       'despensa:listar_comida': (client) =>
         DespensaGateway.listarComida(client as AuthSocket),
 
       'despensa:registrar_comida': (client, data) =>
-        DespensaGateway.registrarComida(
-          client as AuthSocket,
-          data as REQ_RegistrarComida,
-        ),
+        DespensaGateway.registrarComida(client as AuthSocket, data as REQ_RegistrarComida),
 
       'despensa:actualizar_comida': (client, data) =>
-        DespensaGateway.actualizarComida(
-          client as AuthSocket,
-          data as REQ_ActualizarComida,
-        ),
+        DespensaGateway.actualizarComida(client as AuthSocket, data as REQ_ActualizarComida),
 
       'despensa:eliminar_comida': (client, data) =>
-        DespensaGateway.eliminarComida(
-          client as AuthSocket,
-          data as { id: number },
-        ),
+        DespensaGateway.eliminarComida(client as AuthSocket, data as { id: number }),
+
+      //IA 
+      'despensa:analizar_imagen': (client, data) =>
+        DespensaGateway.analizarImagen(client as AuthSocket, data as REQ_AnalizarImagen),
+
+      'despensa:tip_diario': (client) =>
+        DespensaGateway.tipDiario(client as AuthSocket),
+
+      'despensa:recomendar_recetas': (client, data) =>
+        DespensaGateway.recomendarRecetas(client as AuthSocket, data as { cantidad?: number }),
     });
   }
+
+  //Handlers CRUD
 
   static async listarComida(client: AuthSocket) {
     if (!client.usuario) return SendResponse.error('Usuario no autenticado');
@@ -53,10 +63,7 @@ export class DespensaGateway {
     }
   }
 
-  static async actualizarComida(
-    client: AuthSocket,
-    data: REQ_ActualizarComida,
-  ) {
+  static async actualizarComida(client: AuthSocket, data: REQ_ActualizarComida) {
     try {
       if (!client.usuario) return SendResponse.error('Usuario no autenticado');
       const payload = plainToInstance(REQ_ActualizarComida, data);
@@ -78,5 +85,36 @@ export class DespensaGateway {
       console.error('[DespensaGateway] Error al eliminar comida:', error);
       return SendResponse.error('Error al eliminar alimento');
     }
+  }
+
+  //Handlers IA
+
+  static async analizarImagen(client: AuthSocket, data: REQ_AnalizarImagen) {
+    try {
+      if (!client.usuario) return SendResponse.error('Usuario no autenticado');
+      const payload = plainToInstance(REQ_AnalizarImagen, data);
+      await validateOrReject(payload);
+      return await UC_AnalizarImagen.execute(
+        payload.foto_b64!,
+        payload.mime_type ?? 'image/jpeg',
+      );
+    } catch (error) {
+      console.error('[DespensaGateway] Error al analizar imagen:', error);
+      return SendResponse.error('Error al procesar la imagen');
+    }
+  }
+
+  static async tipDiario(client: AuthSocket) {
+    if (!client.usuario) return SendResponse.error('Usuario no autenticado');
+    return await UC_TipDiario.execute(client.usuario.id);
+  }
+
+  static async recomendarRecetas(
+    client: AuthSocket,
+    data: { cantidad?: number },
+  ) {
+    if (!client.usuario) return SendResponse.error('Usuario no autenticado');
+    const cantidad = data?.cantidad && data.cantidad > 0 ? Math.min(data.cantidad, 5) : 3;
+    return await UC_RecomendarRecetas.execute(client.usuario.id, cantidad);
   }
 }
