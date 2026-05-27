@@ -61,9 +61,9 @@ export class AuthGuard implements CanActivate {
         throw new Error('Inválido');
       }
 
-      console.log(
-        `[AuthGuard] Token verificado con Supabase para user: ${data.user.id}`,
-      );
+      // console.log(
+      //   `[AuthGuard] Token verificado con Supabase para user: ${data.user.id}`,
+      // );
       return data.user;
     } catch (error: any) {
       console.error(

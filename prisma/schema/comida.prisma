@@ -4,15 +4,13 @@ model comida {
   nombre            String
   cantidad          String
   descripcion       String?
-  incluir_hora      Boolean   @default(false)
-  fecha_compra      DateTime? @db.Date
-  hora_compra       DateTime? @db.Time
   fecha_vencimiento DateTime? @db.Date
-  hora_vencimiento  DateTime? @db.Time
-  tags              String?
+  tags              String[]
   created_at        DateTime  @default(now()) @db.Timestamptz
   estado            String    @default("Por consumir") // Por consumir / Consumido / Descartado
   // Relaciones
   // N - 1
   usuario           usuario   @relation(fields: [id_usuario], references: [id])
+
+  @@schema("public")
 }

@@ -20,15 +20,8 @@ export class UC_ActualizarComida {
       // Procesar fechas
       const payload = {
         ...rest,
-        fecha_compra: rest.fecha_compra
-          ? new Date(rest.fecha_compra)
-          : undefined,
-        hora_compra: rest.hora_compra ? new Date(rest.hora_compra) : undefined,
         fecha_vencimiento: rest.fecha_vencimiento
           ? new Date(rest.fecha_vencimiento)
-          : undefined,
-        hora_vencimiento: rest.hora_vencimiento
-          ? new Date(rest.hora_vencimiento)
           : undefined,
       };
 

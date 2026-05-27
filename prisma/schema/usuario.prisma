@@ -21,4 +21,6 @@ model usuario {
   // Relaciones
   // 1 - N
   comidas              comida[]
+
+  @@schema("public")
 }

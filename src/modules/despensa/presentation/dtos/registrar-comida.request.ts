@@ -1,5 +1,5 @@
 import {
-  IsBoolean,
+  IsArray,
   IsDateString,
   IsEnum,
   IsNotEmpty,
@@ -21,29 +21,14 @@ export class REQ_RegistrarComida {
   @IsOptional()
   descripcion?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  incluir_hora?: boolean;
-
-  @IsDateString()
-  @IsOptional()
-  fecha_compra?: string;
-
-  @IsDateString()
-  @IsOptional()
-  hora_compra?: string;
-
   @IsDateString()
   @IsOptional()
   fecha_vencimiento?: string;
 
-  @IsDateString()
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
-  hora_vencimiento?: string;
-
-  @IsString()
-  @IsOptional()
-  tags?: string;
+  tags?: string[];
 
   @IsEnum(EstadoComida)
   @IsOptional()

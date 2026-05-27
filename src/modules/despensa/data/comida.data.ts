@@ -9,6 +9,28 @@ export class ComidaData {
     });
   }
 
+  /** Buscar alimentos disponibles ordenados por fecha de vencimiento (limite opcional) */
+  static async findAvailableOrderByVencimiento(
+    id_usuario: number,
+    limit: number = 15,
+  ) {
+    return PrismaService.db.comida.findMany({
+      where: {
+        id_usuario,
+        estado: 'Por consumir',
+      },
+      orderBy: [
+        {
+          fecha_vencimiento: 'asc',
+        },
+        {
+          created_at: 'desc',
+        },
+      ],
+      take: limit,
+    });
+  }
+
   /** Buscar un alimento por su ID */
   static async findById(id: number) {
     return PrismaService.db.comida.findUnique({
@@ -16,27 +38,23 @@ export class ComidaData {
     });
   }
 
-  /** Crear un nuevo alimento */
-  static async create(
+  /** Crear múltiples alimentos en lote (bulk create) */
+  static async createMany(
     id_usuario: number,
-    payload: {
+    payloads: Array<{
       nombre: string;
       cantidad: string;
       descripcion?: string;
-      incluir_hora?: boolean;
-      fecha_compra?: Date;
-      hora_compra?: Date;
       fecha_vencimiento?: Date;
-      hora_vencimiento?: Date;
-      tags?: string;
+      tags?: string[];
       estado?: string;
-    },
+    }>,
   ) {
-    return PrismaService.db.comida.create({
-      data: {
+    return PrismaService.db.comida.createManyAndReturn({
+      data: payloads.map((payload) => ({
         ...payload,
         id_usuario,
-      },
+      })),
     });
   }
 
@@ -47,12 +65,8 @@ export class ComidaData {
       nombre?: string;
       cantidad?: string;
       descripcion?: string;
-      incluir_hora?: boolean;
-      fecha_compra?: Date;
-      hora_compra?: Date;
       fecha_vencimiento?: Date;
-      hora_vencimiento?: Date;
-      tags?: string;
+      tags?: string[];
       estado?: string;
     },
   ) {

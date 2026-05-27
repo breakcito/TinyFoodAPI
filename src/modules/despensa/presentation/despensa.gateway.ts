@@ -69,11 +69,14 @@ export class DespensaGateway {
     return await UC_ListarComida.execute(client.usuario.id);
   }
 
-  static async registrarComida(client: AuthSocket, data: REQ_RegistrarComida) {
+  static async registrarComida(client: AuthSocket, data: any) {
     try {
       if (!client.usuario) return SendResponse.error('Usuario no autenticado');
-      const payload = plainToInstance(REQ_RegistrarComida, data);
-      await validateOrReject(payload);
+      const dataArray = Array.isArray(data) ? data : [data];
+      const payload = plainToInstance(REQ_RegistrarComida, dataArray);
+      for (const item of payload) {
+        await validateOrReject(item);
+      }
       return await UC_RegistrarComida.execute(client.usuario.id, payload);
     } catch (error) {
       console.error('[DespensaGateway] Error al registrar comida:', error);
@@ -115,10 +118,7 @@ export class DespensaGateway {
       if (!client.usuario) return SendResponse.error('Usuario no autenticado');
       const payload = plainToInstance(REQ_AnalizarImagen, data);
       await validateOrReject(payload);
-      return await UC_AnalizarImagen.execute(
-        payload.foto_b64,
-        payload.mime_type ?? 'image/jpeg',
-      );
+      return await UC_AnalizarImagen.execute(payload.foto_b64);
     } catch (error) {
       console.error('[DespensaGateway] Error al analizar imagen:', error);
       return SendResponse.error('Error al procesar la imagen');

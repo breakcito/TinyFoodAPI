@@ -1,10 +1,9 @@
-import { GeminiService } from '../../../common/service/gemini.service';
+import { IAService } from '../../../common/service/ia.service';
 import { ApiResponse } from '../../../common/logic/dtos/api.response';
 import { SendResponse } from '../../../common/utils/functions/api-response';
-import { ComidaData } from '../data/comida.data';
-import { UserData } from '../../usuario/data/usuario.data';
+import { UC_BuildIAContext } from './build-ia-context.uc';
 
-interface GeminiTipDiario {
+interface RES_TipDiario {
   titulo: string;
   consejo: string;
   urgencia: 'alta' | 'media' | 'baja';
@@ -17,81 +16,24 @@ export class UC_TipDiario {
     dias_caducidad: number = 5,
   ): Promise<ApiResponse> {
     try {
-      const todasLasComidas = await ComidaData.findAllByUserId(id_usuario);
-      const usuario = await UserData.findById(id_usuario);
+      const { contextoUsuario, comidas } =
+        await UC_BuildIAContext.execute(id_usuario);
 
       const hoy = new Date();
       hoy.setHours(0, 0, 0, 0);
       const enLimiteDias = new Date(hoy);
       enLimiteDias.setDate(enLimiteDias.getDate() + dias_caducidad);
 
-      const proximosAVencer = todasLasComidas.filter((c) => {
+      const proximosAVencer = comidas.todas.filter((c) => {
         if (!c.fecha_vencimiento || c.estado !== 'Por consumir') return false;
         const vence = new Date(c.fecha_vencimiento);
         vence.setHours(0, 0, 0, 0);
         return vence >= hoy && vence <= enLimiteDias;
       });
 
-      const disponibles = todasLasComidas.filter(
-        (c) => c.estado === 'Por consumir',
-      );
-
-      // ── Contexto del usuario ──────────────────────────────────────────────
-      let configPreferencias = '';
-      if (usuario?.configuracion) {
-        try {
-          const config = (
-            typeof usuario.configuracion === 'string'
-              ? JSON.parse(usuario.configuracion)
-              : usuario.configuracion
-          ) as {
-            dificultad?: string;
-            estilosComida?: string[];
-            equipamiento?: string[];
-          } | null;
-
-          if (config) {
-            const prepDificultad =
-              config.dificultad === 'rapido'
-                ? 'Prefiere recetas rápidas/express de fácil preparación.'
-                : 'Está en Modo Chef (puede preparar recetas más elaboradas y complejas).';
-
-            const estilos = config.estilosComida?.length
-              ? `Estilos de cocina favoritos: ${config.estilosComida.join(', ')}`
-              : '';
-
-            const equipos = config.equipamiento?.length
-              ? `Equipamiento disponible: ${config.equipamiento.join(', ')}`
-              : '';
-
-            configPreferencias = [prepDificultad, estilos, equipos]
-              .filter(Boolean)
-              .join('\n');
-          }
-        } catch (e) {
-          console.error('[UC_TipDiario] Error parsing configuracion:', e);
-        }
-      }
-
-      const contextoUsuario = usuario
-        ? [
-            usuario.objetivo_fisico
-              ? `Objetivo físico: ${usuario.objetivo_fisico}`
-              : null,
-            usuario.alimentos_prohibidos?.length
-              ? `Alimentos prohibidos/alergias: ${usuario.alimentos_prohibidos.join(', ')}`
-              : null,
-            usuario.preferencias?.length
-              ? `Preferencias: ${usuario.preferencias.join(', ')}`
-              : null,
-            configPreferencias || null,
-          ]
-            .filter(Boolean)
-            .join('\n')
+      const contextoBloque = contextoUsuario
+        ? `Contexto del usuario:\n${contextoUsuario}`
         : '';
-
-      const gemini = GeminiService.instance;
-      if (!gemini) return SendResponse.error('Servicio de IA no disponible');
 
       let prompt = '';
 
@@ -109,15 +51,15 @@ export class UC_TipDiario {
 
         prompt = `
 Eres un asistente nutricional amigable de TinyFood.
- 
+
 El usuario tiene estos alimentos PRÓXIMOS A VENCER:
 ${listaUrgente}
- 
-${contextoUsuario ? `Contexto del usuario:\n${contextoUsuario}` : ''}
- 
+
+${contextoBloque}
+
 Genera un consejo breve, práctico y motivador para usar esos alimentos antes de que se malogren.
 Sé específico con el alimento más urgente.
- 
+
 Devuelve ÚNICAMENTE este JSON:
 {
   "titulo": "título corto llamativo máximo 5 palabras",
@@ -125,24 +67,24 @@ Devuelve ÚNICAMENTE este JSON:
   "urgencia": "alta | media | baja",
   "emoji": "emoji del alimento más urgente"
 }`.trim();
-      } else if (disponibles.length > 0) {
+      } else if (comidas.disponibles.length > 0) {
         // Hay alimentos pero ninguno urgente — tip de buenas prácticas
-        const listaDisponibles = disponibles
+        const listaDisponibles = comidas.disponibles
           .slice(0, 5)
           .map((c) => `- ${c.nombre} (${c.cantidad})`)
           .join('\n');
 
         prompt = `
 Eres un asistente nutricional amigable de TinyFood.
- 
+
 El usuario tiene estos alimentos en su despensa:
 ${listaDisponibles}
- 
-${contextoUsuario ? `Contexto del usuario:\n${contextoUsuario}` : ''}
- 
+
+${contextoBloque}
+
 Genera un consejo útil del día sobre cómo aprovechar mejor esos alimentos,
 una combinación saludable, o un tip de cocina/nutrición relacionado.
- 
+
 Devuelve ÚNICAMENTE este JSON:
 {
   "titulo": "título corto llamativo máximo 5 palabras",
@@ -154,13 +96,13 @@ Devuelve ÚNICAMENTE este JSON:
         // Despensa vacía — tip para motivar a llenar la despensa
         prompt = `
 Eres un asistente nutricional amigable de TinyFood.
- 
+
 El usuario tiene la despensa vacía.
-${contextoUsuario ? `Contexto del usuario:\n${contextoUsuario}` : ''}
- 
+${contextoBloque}
+
 Genera un consejo motivador y útil sobre qué alimentos saludables debería comprar
 o cómo organizar mejor su despensa.
- 
+
 Devuelve ÚNICAMENTE este JSON:
 {
   "titulo": "título corto motivador máximo 5 palabras",
@@ -170,7 +112,7 @@ Devuelve ÚNICAMENTE este JSON:
 }`.trim();
       }
 
-      const resultado = await gemini.generate<GeminiTipDiario>(prompt);
+      const resultado = await IAService.generate<RES_TipDiario>(prompt);
 
       return SendResponse.success(
         {
@@ -178,7 +120,7 @@ Devuelve ÚNICAMENTE este JSON:
           consejo: resultado.consejo,
           urgencia: resultado.urgencia,
           emoji: resultado.emoji,
-          hay_tip: true, // siempre hay tip
+          hay_tip: true,
           alimentos_proximos: proximosAVencer.length,
         },
         'Tip diario generado',

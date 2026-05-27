@@ -1,167 +1,114 @@
-import { GeminiService } from '../../../common/service/gemini.service';
+import { IAService } from '../../../common/service/ia.service';
 import { ApiResponse } from '../../../common/logic/dtos/api.response';
 import { SendResponse } from '../../../common/utils/functions/api-response';
+import { FoodTags } from 'src/common/utils/variables/food-tags';
 
-interface GeminiAnalisisAlimento {
+export interface RES_AnalizarImagenItem {
   nombre: string;
   cantidad: string;
   categoria: string;
   tags: string[];
-  notas: string;
+  descripcion: string;
   dias_duracion_estimados: number;
-  confianza: 'alta' | 'media' | 'baja';
+  fecha_vencimiento?: string; // ISO string
 }
-
-// Array maestro de etiquetas — la IA elige las más relevantes
-const TAGS_DISPONIBLES = [
-  // Estado y frescura
-  'fresco',
-  'maduro',
-  'verde',
-  'seco',
-  'congelado',
-  'enlatado',
-  'procesado',
-  'orgánico',
-  'natural',
-  // Tipo de alimento
-  'fruta',
-  'verdura',
-  'legumbre',
-  'cereal',
-  'lácteo',
-  'proteína',
-  'carne',
-  'pescado',
-  'mariscos',
-  'huevo',
-  'semilla',
-  'nuez',
-  'aceite',
-  'condimento',
-  'especia',
-  'bebida',
-  'snack',
-  'dulce',
-  'pan',
-  // Características nutricionales
-  'alto en proteína',
-  'alto en fibra',
-  'alto en vitamina C',
-  'rico en potasio',
-  'bajo en calorías',
-  'alto en calcio',
-  'fuente de hierro',
-  'rico en omega-3',
-  'antioxidante',
-  'bajo en grasa',
-  // Dieta
-  'vegano',
-  'vegetariano',
-  'sin gluten',
-  'sin lactosa',
-  'keto',
-  'paleo',
-  'sin azúcar',
-  // Preparación
-  'listo para comer',
-  'requiere cocción',
-  'requiere refrigeración',
-  'no perecedero',
-  // Color (útil para búsqueda)
-  'rojo',
-  'verde',
-  'amarillo',
-  'naranja',
-  'morado',
-  'blanco',
-  'marrón',
-  // Origen
-  'tropical',
-  'importado',
-  'local',
-  'de temporada',
-  // Uso culinario
-  'para desayuno',
-  'para almuerzo',
-  'para cena',
-  'para snack',
-  'para bebida',
-  'para postre',
-  'para ensalada',
-  'para sopa',
-  'para batido',
-  'para horneado',
-];
 
 export class UC_AnalizarImagen {
-  static async execute(
-    foto_b64: string,
-    mimeType: string = 'image/jpeg',
-  ): Promise<ApiResponse> {
+  static async execute(foto_b64: string): Promise<ApiResponse> {
     try {
       const prompt = `
-Eres un experto en nutrición y gastronomía integrado en TinyFood, una app de gestión de despensa.
+      Eres un experto en nutrición y gastronomía integrado en TinyFood, una app de gestión de despensa inteligente.
 
-Analiza la imagen e identifica el alimento principal.
+      Analiza la imagen e identifica todas las comidas, alimentos o bebidas individuales que contenga. Si consideras que hay más de un alimento o comida que se pueda separar (por ejemplo, si en una sola foto hay un plato de arroz con pollo, dos manzanas y una gaseosa), sepáralos en elementos independientes en la lista de alimentos, asignando la información correspondiente a cada uno.
+      Evita colocar una descripcion que no aporta nada al control de la despensa. si no sabes de que es el alimento no lo inventes ni intentes adivinar.
 
-LISTA DE ETIQUETAS DISPONIBLES (elige entre 3 y 6 que mejor describan el alimento):
-${TAGS_DISPONIBLES.join(', ')}
-
-Devuelve ÚNICAMENTE este objeto JSON (sin texto adicional, sin markdown):
-{
-  "nombre": "nombre común del alimento en español (ej: plátano, leche entera, pechuga de pollo)",
-  "cantidad": "cantidad estimada con unidad (ej: '4 unidades', '500g', '1 litro')",
-  "categoria": "una de: fruta | verdura | lácteo | proteína | cereal | bebida | condimento | snack | otro",
-  "tags": ["etiqueta1", "etiqueta2", "etiqueta3"],
-  "notas": "información nutricional y de almacenamiento útil para el usuario (ej: 'Rico en potasio y vitamina B6. Conservar a temperatura ambiente hasta madurar, luego refrigerar. Ideal para batidos y postres.')",
-  "dias_duracion_estimados": número entero de días que suele durar en condiciones normales,
-  "confianza": "alta | media | baja según qué tan seguro estás"
-}
-
-Si no identificas ningún alimento, devuelve el mismo schema con nombre vacío y confianza "baja".
+      Para las etiquetas (tags) de cada alimento, selecciona estrictamente de la siguiente lista de etiquetas disponibles (elige entre 3 y 6 etiquetas):
+      ${FoodTags.join(', ')}
       `.trim();
 
-      const gemini = GeminiService.instance;
-      if (!gemini) return SendResponse.error('Servicio de IA no disponible');
+      const schema = {
+        type: 'object',
+        properties: {
+          alimentos: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                nombre: { type: 'string' },
+                cantidad: { type: 'string' },
+                categoria: {
+                  type: 'string',
+                  enum: FoodTags,
+                },
+                tags: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                    enum: FoodTags,
+                  },
+                },
+                descripcion: { type: 'string' },
+                dias_duracion_estimados: { type: 'integer' },
+              },
+              required: [
+                'nombre',
+                'cantidad',
+                'categoria',
+                'tags',
+                'descripcion',
+                'dias_duracion_estimados',
+              ],
+              additionalProperties: false,
+            },
+          },
+        },
+        required: ['alimentos'],
+        additionalProperties: false,
+      };
 
-      const resultado = await gemini.generateFromImage<GeminiAnalisisAlimento>(
-        foto_b64,
-        mimeType,
-        prompt,
-      );
+      const response = await IAService.analyzeImage<{
+        alimentos: RES_AnalizarImagenItem[];
+      }>(foto_b64, prompt, schema, 'analisis_alimentos');
 
-      if (!resultado.nombre || resultado.confianza === 'baja') {
+      const resultado = response?.alimentos || [];
+
+      if (!resultado || resultado.length === 0) {
         return SendResponse.error(
-          'No se pudo identificar un alimento en la imagen. Intenta con una foto más clara.',
+          'No se pudo identificar ningún alimento en la imagen. Intenta con una foto más clara.',
         );
       }
 
-      const fechaVencimientoEstimada =
-        resultado.dias_duracion_estimados > 0
-          ? new Date(
-              Date.now() +
-                resultado.dias_duracion_estimados * 24 * 60 * 60 * 1000,
-            ).toISOString()
-          : undefined;
+      const alimentosMapeados = resultado
+        .filter((item) => item.nombre && item.nombre.trim() !== '')
+        .map((item) => {
+          const fechaVencimientoEstimada =
+            item.dias_duracion_estimados > 0
+              ? new Date(
+                  Date.now() +
+                    item.dias_duracion_estimados * 24 * 60 * 60 * 1000,
+                ).toISOString()
+              : undefined;
 
-      // Convertir array de tags a string separado por coma
-      const tagsString = Array.isArray(resultado.tags)
-        ? resultado.tags.join(',')
-        : (resultado.tags ?? '');
+          return {
+            nombre: item.nombre,
+            cantidad: item.cantidad,
+            categoria: item.categoria,
+            tags: item.tags,
+            descripcion: item.descripcion,
+            dias_duracion_estimados: item.dias_duracion_estimados,
+            fecha_vencimiento: fechaVencimientoEstimada,
+          };
+        });
+
+      if (alimentosMapeados.length === 0) {
+        return SendResponse.error(
+          'No se pudo identificar ningún alimento válido en la imagen. Intenta de nuevo.',
+        );
+      }
 
       return SendResponse.success(
-        {
-          nombre: resultado.nombre,
-          cantidad: resultado.cantidad,
-          categoria: resultado.categoria,
-          tags: tagsString,
-          descripcion: resultado.notas,
-          dias_duracion_estimados: resultado.dias_duracion_estimados,
-          fecha_vencimiento: fechaVencimientoEstimada,
-          confianza: resultado.confianza,
-        },
-        `Alimento identificado: ${resultado.nombre}`,
+        alimentosMapeados,
+        `Identificado(s) ${alimentosMapeados.length} alimento(s) con éxito`,
       );
     } catch (error) {
       console.error('[UC_AnalizarImagen] Error:', error);

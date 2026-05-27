@@ -1,5 +1,5 @@
 import {
-  IsBoolean,
+  IsArray,
   IsDateString,
   IsEnum,
   IsInt,
@@ -12,7 +12,7 @@ import { EstadoComida } from 'src/common/utils/enums/estado-comida.enum';
 export class REQ_ActualizarComida {
   @IsInt()
   @IsNotEmpty()
-  id: number;
+  id!: number;
 
   @IsString()
   @IsOptional()
@@ -26,29 +26,14 @@ export class REQ_ActualizarComida {
   @IsOptional()
   descripcion?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  incluir_hora?: boolean;
-
-  @IsDateString()
-  @IsOptional()
-  fecha_compra?: string;
-
-  @IsDateString()
-  @IsOptional()
-  hora_compra?: string;
-
   @IsDateString()
   @IsOptional()
   fecha_vencimiento?: string;
 
-  @IsDateString()
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
-  hora_vencimiento?: string;
-
-  @IsString()
-  @IsOptional()
-  tags?: string;
+  tags?: string[];
 
   @IsEnum(EstadoComida)
   @IsOptional()
