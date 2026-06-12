@@ -7,6 +7,7 @@ model comida {
   fecha_vencimiento DateTime? @db.Date
   tags              String[]
   created_at        DateTime  @default(now()) @db.Timestamptz
+  updated_at        DateTime  @default(now()) @updatedAt @db.Timestamptz
   estado            String    @default("Por consumir") // Por consumir / Consumido / Descartado
   // Relaciones
   // N - 1

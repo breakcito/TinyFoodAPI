@@ -76,6 +76,22 @@ export class ComidaData {
     });
   }
 
+  /** Consumir alimento (reduce cantidad o cambia a Consumido) */
+  static async consumir(id: number, cantidadRestante: string) {
+    // Si la cantidad es '0' o similar, o se consume todo, se marca como 'Consumido'.
+    // Sino, solo se actualiza la cantidad.
+    const isZero = ['0', '0 unidades', '0 porciones'].includes(
+      cantidadRestante.trim(),
+    );
+    return PrismaService.db.comida.update({
+      where: { id },
+      data: {
+        cantidad: cantidadRestante,
+        estado: isZero ? 'Consumido' : undefined,
+      },
+    });
+  }
+
   /** Eliminar un alimento */
   static async delete(id: number) {
     return PrismaService.db.comida.delete({

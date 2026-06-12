@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './modules/auth/auth.module';
 import { PublicGateway } from './common/presentation/gateways/public.gateway';
 import { PrivateGateway } from './common/presentation/gateways/private.gateway';
@@ -13,6 +14,7 @@ import { AppController } from './app.controller';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     CommonModule,
     AuthModule,
     UserModule,

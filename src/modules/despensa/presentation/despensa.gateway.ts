@@ -11,6 +11,7 @@ import { UC_EliminarComida } from '../logic/eliminar-comida.uc';
 import { UC_AnalizarImagen } from '../logic/analizar-imagen.uc';
 import { UC_TipDiario } from '../logic/tip-diario.uc';
 import { UC_RecomendarRecetas } from '../logic/recomendar-recetas.uc';
+import { ConsumirComidaUC } from '../logic/consumir-comida.uc';
 
 import { REQ_RegistrarComida } from './dtos/registrar-comida.request';
 import { REQ_ActualizarComida } from './dtos/actualizar-comida.request';
@@ -39,6 +40,12 @@ export class DespensaGateway {
         DespensaGateway.eliminarComida(
           client as AuthSocket,
           data as { id: number },
+        ),
+
+      'despensa:consumir_comida': (client, data) =>
+        DespensaGateway.consumirComida(
+          client as AuthSocket,
+          data as { id: number; cantidadRestante: string },
         ),
 
       //IA
@@ -108,6 +115,25 @@ export class DespensaGateway {
     } catch (error) {
       console.error('[DespensaGateway] Error al eliminar comida:', error);
       return SendResponse.error('Error al eliminar alimento');
+    }
+  }
+
+  static async consumirComida(
+    client: AuthSocket,
+    data: { id: number; cantidadRestante: string },
+  ) {
+    try {
+      if (!client.usuario) return SendResponse.error('Usuario no autenticado');
+      if (
+        !data ||
+        typeof data.id !== 'number' ||
+        typeof data.cantidadRestante !== 'string'
+      )
+        return SendResponse.error('Datos de consumo inválidos');
+      return await ConsumirComidaUC.execute(client.usuario.id, data);
+    } catch (error) {
+      console.error('[DespensaGateway] Error al consumir comida:', error);
+      return SendResponse.error('Error al registrar consumo');
     }
   }
 

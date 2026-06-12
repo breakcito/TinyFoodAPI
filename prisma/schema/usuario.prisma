@@ -15,7 +15,7 @@ model usuario {
   //
   alimentos_prohibidos String[] // ['platano', 'nuez', ...]
   preferencias         String[] // ['pollo frito', 'torta de chotolatep', ...]
-  objetivo_fisico      String?   // 'mantener', 'perder peso', 'ganar peso', ...
+  objetivo_fisico      String? // 'mantener', 'perder peso', 'ganar peso', ...
   //
   created_at           DateTime  @default(now()) @db.Timestamptz
   // Relaciones
