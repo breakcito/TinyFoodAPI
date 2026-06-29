@@ -86,13 +86,14 @@ export class UC_RecomendarRecetas {
       Prioriza los ingredientes que aparecen primero en la lista (próximos a vencer).
 
       REGLAS OBLIGATORIAS DE COMPOSICIÓN:
-      1. Coherencia de ingredientes: No intentes usar todos los ingredientes en una sola receta. Genera platos con sentido culinario y lógico (por ejemplo, si hay carne y arándanos, haz un plato con la carne, NO le agregues arándanos).
-      2. Sin combinaciones absurdas: Prohibido mezclar frutas de sabor dulce (fresas, arándanos, etc.) en platos salados tradicionales con pollo, carne o pescado (como "ají de gallina con arándanos").
-      3. Seguridad alimentaria: Bajo ninguna circunstancia sugieras aves o carnes crudas o marinadas en frío (está terminantemente prohibido el "ceviche de pollo").
-      4. Si la receta necesita ingredientes comunes que el usuario no tiene en la despensa (como aceite, sal, cebolla o arroz), lístalos bajo "ingredientes_extra".
-      5. Nombres reales y tradicionales: Las recetas deben tener nombres de platos reales, conocidos y apetitosos del mundo real. Evita nombres descriptivos o artificiales del tipo "[Ingrediente A] con [Ingrediente B]".
+      1. Coherencia de ingredientes y REALISMO CULINARIO: Las recetas DEBEN ser platillos reales, existentes, conocidos y tradicionales de la gastronomía mundial o regional. Queda ESTRICTAMENTE PROHIBIDO inventar recetas artificiales o nombres ficticios solo para meter ingredientes disponibles.
+      2. No intentes usar todos los ingredientes en una sola receta. Si el usuario tiene carne y arándanos, genera un plato salado real con la carne (ej: Lomo Saltado o Carne al horno) y un postre o jugo real con los arándanos.
+      3. Sin combinaciones absurdas: Prohibido mezclar frutas de sabor dulce (fresas, arándanos, etc.) en platos salados tradicionales con pollo, carne o pescado (como "ají de gallina con arándanos").
+      4. Seguridad alimentaria: Bajo ninguna circunstancia sugieras aves o carnes crudas o marinadas en frío (está terminantemente prohibido el "ceviche de pollo").
+      5. Si la receta necesita ingredientes básicos comunes que el usuario no tiene en la despensa (como aceite, sal, cebolla, ajo, arroz o especias), lístalos bajo "ingredientes_extra".
       6. Platos dulces vs salados: Si usas frutas dulces (como fresas, arándanos o plátanos), utilízalas únicamente para preparar recetas dulces lógicas (postres, desayunos, batidos, repostería o ensaladas de frutas).
-      7. Cantidades y medidas: Debes ajustar las cantidades de los ingredientes según la cantidad de porciones que se indican. Si el usuario tiene solo 200g de pollo, la receta debe ser para 1 o 2 porciones, no para 4.
+      7. Cantidades y medidas: Debes ajustar las cantidades de los ingredientes según la cantidad de porciones que se indican. Si el usuario tiene solo 200g de pollo, la receta debe ser para 1 o 2 porciones.
+      8. Respeta estrictamente cualquier alergia, alimento prohibido o restricción médica contenida en el contexto del usuario.
       `.trim();
 
       const response = await IAService.generate<{ recetas: RES_Receta[] }>(

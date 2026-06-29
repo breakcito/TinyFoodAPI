@@ -78,15 +78,18 @@ export class ComidaData {
 
   /** Consumir alimento (reduce cantidad o cambia a Consumido) */
   static async consumir(id: number, cantidadRestante: string) {
-    // Si la cantidad es '0' o similar, o se consume todo, se marca como 'Consumido'.
-    // Sino, solo se actualiza la cantidad.
-    const isZero = ['0', '0 unidades', '0 porciones'].includes(
-      cantidadRestante.trim(),
-    );
+    const clean = cantidadRestante.trim().toLowerCase();
+    const isZero =
+      clean === '0' ||
+      clean === 'consumido' ||
+      clean.startsWith('0 ') ||
+      clean === '0g' ||
+      clean === '0 g' ||
+      ['0', '0 unidades', '0 porciones', '0 g', '0g'].includes(clean);
     return PrismaService.db.comida.update({
       where: { id },
       data: {
-        cantidad: cantidadRestante,
+        cantidad: isZero ? '0' : cantidadRestante,
         estado: isZero ? 'Consumido' : undefined,
       },
     });
