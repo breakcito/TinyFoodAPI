@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import Groq from 'groq-sdk';
 import { getDataUrlFromB64 } from '../utils/functions/get-data-url-from-b64';
 
-// Servicio de IA centralizado con autodetección de modelos de Groq y resiliencia.
+// Servicio de IA centralizado con autodetección de modelos de Groq y resiliencia de 3 niveles.
 @Injectable()
 export class IAService implements OnModuleInit {
   static instance: IAService;
@@ -37,6 +37,24 @@ export class IAService implements OnModuleInit {
 
   async onModuleInit() {
     await this.syncActiveModels();
+  }
+
+  /**
+   * Limpia etiquetas de pensamiento (<think>...</think>), bloques markdown y extrae JSON válido.
+   */
+  private static cleanAndParseJson<T>(raw: string): T {
+    let cleaned = raw
+      .replace(/<think>[\s\S]*?<\/think>/gi, '')
+      .replace(/^```json\s*/i, '')
+      .replace(/^```\s*/i, '')
+      .replace(/\s*```$/, '')
+      .trim();
+
+    const match = cleaned.match(/\{[\s\S]*\}/) || cleaned.match(/\[[\s\S]*\]/);
+    if (match) {
+      cleaned = match[0];
+    }
+    return JSON.parse(cleaned) as T;
   }
 
   /**
@@ -98,7 +116,7 @@ export class IAService implements OnModuleInit {
 
   /**
    * Método genérico privado para interactuar con Groq, con tolerancia a fallos
-   * y fallback automático de json_schema a json_object si el modelo no soporta json_schema.
+   * y sistema de resiliencia en 3 niveles para garantizar parsing de JSON.
    */
   private static async requestGroq<T>({
     model,
@@ -128,33 +146,25 @@ export class IAService implements OnModuleInit {
         }
       : { type: 'json_object' as const };
 
+    // --- NIVEL 1: Intentar petición original con json_schema o json_object ---
     try {
       const completion = await this.instance.groq.chat.completions.create({
         model,
         messages: currentMessages,
         temperature,
+        max_tokens: 1500,
         response_format: responseFormat,
       });
 
       const raw = completion.choices[0]?.message?.content ?? '{}';
-      return JSON.parse(raw) as T;
+      return this.cleanAndParseJson<T>(raw);
     } catch (error: any) {
       const errMsg = String(error?.message || error || '');
+      console.warn(`[IAService] Nivel 1 falló para modelo '${model}': ${errMsg}`);
 
-      // Detectar si el modelo no soporta `json_schema` y reintentar automáticamente con `json_object`
-      if (
-        schema &&
-        responseFormat.type === 'json_schema' &&
-        (errMsg.includes('json_schema') || error?.status === 400)
-      ) {
-        console.warn(
-          `[IAService] El modelo '${model}' no soporta 'json_schema'. Aplicando fallback automático a 'json_object'...`,
-        );
-
-        responseFormat = { type: 'json_object' as const };
-
-        // Inyectar el esquema esperado dentro del prompt del último mensaje para garantizar la estructura
-        const schemaPrompt = `\n\n[REGLA DE FORMATO OBLIGATORIA]: Responde ÚNICAMENTE en formato JSON válido que cumpla estrictamente con la siguiente estructura de esquema:\n${JSON.stringify(schema, null, 2)}`;
+      // Preparar inyección de prompt con instrucciones de esquema para niveles 2 y 3
+      if (schema) {
+        const schemaPrompt = `\n\n[REGLA DE FORMATO OBLIGATORIA]: Responde ÚNICAMENTE con un OBJETO JSON válido (un objeto que comience con '{' y termine con '}') que cumpla estrictamente con esta estructura:\n${JSON.stringify(schema, null, 2)}`;
 
         const lastIndex = currentMessages.length - 1;
         const lastMsg = currentMessages[lastIndex];
@@ -172,30 +182,49 @@ export class IAService implements OnModuleInit {
             ),
           };
         }
+      }
 
+      // --- NIVEL 2: Fallback a json_object si json_schema no es soportado ---
+      if (schema && responseFormat.type === 'json_schema') {
         try {
+          console.log(`[IAService] Nivel 2: Reintentando '${model}' con json_object...`);
           const completionFallback =
             await this.instance.groq.chat.completions.create({
               model,
               messages: currentMessages,
               temperature,
-              response_format: responseFormat,
+              max_tokens: 1500,
+              response_format: { type: 'json_object' as const },
             });
 
           const rawFallback =
             completionFallback.choices[0]?.message?.content ?? '{}';
-          return JSON.parse(rawFallback) as T;
-        } catch (fallbackError) {
-          console.error(
-            '[IAService] Error durante el fallback a json_object:',
-            fallbackError,
+          return this.cleanAndParseJson<T>(rawFallback);
+        } catch (fallbackError: any) {
+          console.warn(
+            `[IAService] Nivel 2 falló para '${model}': ${fallbackError?.message}`,
           );
-          throw new Error('Error al procesar la solicitud con la IA.');
         }
       }
 
-      console.error('[IAService] Error en requestGroq:', error);
-      throw new Error('Error al procesar la solicitud con la IA.');
+      // --- NIVEL 3: Fallback sin response_format (Tolera etiquetas <think> y parsea manualmente) ---
+      try {
+        console.log(
+          `[IAService] Nivel 3: Reintentando '${model}' sin response_format para permitir parsing manual...`,
+        );
+        const completionRaw = await this.instance.groq.chat.completions.create({
+          model,
+          messages: currentMessages,
+          temperature,
+          max_tokens: 1500,
+        });
+
+        const rawContent = completionRaw.choices[0]?.message?.content ?? '{}';
+        return this.cleanAndParseJson<T>(rawContent);
+      } catch (rawError) {
+        console.error('[IAService] Nivel 3 también falló:', rawError);
+        throw new Error('Error al procesar la solicitud con la IA.');
+      }
     }
   }
 

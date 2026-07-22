@@ -20,10 +20,12 @@ export class UC_AnalizarImagen {
       Eres un experto en nutrición y gastronomía integrado en TinyFood, una app de gestión de despensa inteligente.
 
       Analiza la imagen e identifica todas las comidas, alimentos o bebidas individuales que contenga. Si consideras que hay más de un alimento o comida que se pueda separar (por ejemplo, si en una sola foto hay un plato de arroz con pollo, dos manzanas y una gaseosa), sepáralos en elementos independientes en la lista de alimentos, asignando la información correspondiente a cada uno.
-      Evita colocar una descripcion que no aporta nada al control de la despensa. si no sabes de que es el alimento no lo inventes ni intentes adivinar.
+      Evita colocar una descripción que no aporta nada al control de la despensa. Si no sabes qué alimento es, no lo inventes ni intentes adivinar.
 
       Para las etiquetas (tags) de cada alimento, selecciona estrictamente de la siguiente lista de etiquetas disponibles (elige entre 3 y 6 etiquetas):
       ${FoodTags.join(', ')}
+
+      [REGLA DE FORMATO OBLIGATORIA]: Devuelve ÚNICAMENTE un OBJETO JSON que comience con '{' y termine con '}' con la propiedad raíz "alimentos".
       `.trim();
 
       const schema = {
