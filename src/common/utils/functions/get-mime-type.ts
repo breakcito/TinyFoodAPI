@@ -16,13 +16,19 @@ export async function getMimeType(base64: string): Promise<[string, string]> {
   }
 
   // 2. Si no tiene cabecera, decodificar a Buffer y detectar con file-type
-  const base64Clean = base64.replace(/^data:[^;]+;base64,/, '');
+  const base64Clean = base64
+    .replace(/^data:[^;]+;base64,/, '')
+    .replace(/\s+/g, '');
   const buffer = Buffer.from(base64Clean, 'base64');
 
-  const result = await fromBuffer(buffer);
-  if (result) {
-    return [result.mime, result.ext];
+  try {
+    const result = await fromBuffer(buffer);
+    if (result && result.mime.startsWith('image/')) {
+      return [result.mime, result.ext];
+    }
+  } catch {
+    // Ignorar error de detección y usar fallback de imagen
   }
 
-  return ['application/octet-stream', 'bin'];
+  return ['image/jpeg', 'jpg'];
 }

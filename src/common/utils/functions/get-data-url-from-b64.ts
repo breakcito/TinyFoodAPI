@@ -5,9 +5,10 @@ import { getMimeType } from './get-mime-type';
  * Si ya lo incluye, lo retorna tal cual.
  */
 export async function getDataUrlFromB64(b64: string): Promise<string> {
-  if (b64.startsWith('data:')) {
-    return b64;
+  const cleaned = b64.trim().replace(/\s+/g, '');
+  if (cleaned.startsWith('data:')) {
+    return cleaned;
   }
-  const [mime] = await getMimeType(b64);
-  return `data:${mime};base64,${b64}`;
+  const [mime] = await getMimeType(cleaned);
+  return `data:${mime};base64,${cleaned}`;
 }
