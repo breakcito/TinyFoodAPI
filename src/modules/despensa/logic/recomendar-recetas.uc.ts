@@ -75,25 +75,28 @@ export class UC_RecomendarRecetas {
         .join('\n');
 
       const prompt = `
-      Eres un chef y nutricionista experto integrado en TinyFood, una app de gestión de despensa.
+      Eres un chef y nutricionista experto en cocina real, casera, popular y tradicional.
 
-      El usuario tiene estos ingredientes disponibles en su despensa (ordenados por urgencia de vencimiento):
+      El usuario tiene los siguientes ítems registrados en su despensa (ordenados por urgencia de vencimiento):
       ${listaIngredientes}
 
-      ${contextoUsuario ? `Contexto importante del usuario:\n${contextoUsuario}` : ''}
+      ${contextoUsuario ? `Contexto importante del usuario (estilos culinarios, restricciones, metas):\n${contextoUsuario}` : ''}
 
-      Genera exactamente ${cantidad} recetas deliciosas y prácticas usando principalmente los ingredientes disponibles.
-      Prioriza los ingredientes que aparecen primero en la lista (próximos a vencer).
+      Genera exactamente ${cantidad} recetas deliciosas, realistas y prácticas.
 
-      REGLAS OBLIGATORIAS DE COMPOSICIÓN:
-      1. Coherencia de ingredientes y REALISMO CULINARIO: Las recetas DEBEN ser platillos reales, existentes, conocidos y tradicionales de la gastronomía mundial o regional. Queda ESTRICTAMENTE PROHIBIDO inventar recetas artificiales o nombres ficticios solo para meter ingredientes disponibles.
-      2. No intentes usar todos los ingredientes en una sola receta. Si el usuario tiene carne y arándanos, genera un plato salado real con la carne (ej: Lomo Saltado o Carne al horno) y un postre o jugo real con los arándanos.
-      3. Sin combinaciones absurdas: Prohibido mezclar frutas de sabor dulce (fresas, arándanos, etc.) en platos salados tradicionales con pollo, carne o pescado (como "ají de gallina con arándanos").
-      4. Seguridad alimentaria: Bajo ninguna circunstancia sugieras aves o carnes crudas o marinadas en frío (está terminantemente prohibido el "ceviche de pollo").
-      5. Si la receta necesita ingredientes básicos comunes que el usuario no tiene en la despensa (como aceite, sal, cebolla, ajo, arroz o especias), lístalos bajo "ingredientes_extra".
-      6. Platos dulces vs salados: Si usas frutas dulces (como fresas, arándanos o plátanos), utilízalas únicamente para preparar recetas dulces lógicas (postres, desayunos, batidos, repostería o ensaladas de frutas).
-      7. Cantidades y medidas: Debes ajustar las cantidades de los ingredientes según la cantidad de porciones que se indican. Si el usuario tiene solo 200g de pollo, la receta debe ser para 1 o 2 porciones.
-      8. Respeta estrictamente cualquier alergia, alimento prohibido o restricción médica contenida en el contexto del usuario.
+      REGLAS DE ORO DE REALISMO CULINARIO Y COMIDA CASERA:
+      1. PLATILLOS REALES Y COTIDIANOS: Las recetas DEBEN ser platillos reales, existentes, populares y tradicionales de la comida casera o familiar del día a día (ej. locro de zapallo, arroz a la cubana, menestra con arroz y huevo o pescado frito, tortilla de verduras, arroz chaufa, pollo al horno, puré de papas con guiso, etc.), alineados al contexto gastronómico del usuario. Queda ESTRICTAMENTE PROHIBIDO inventar recetas artificiales o nombres estrafalarios solo para intentar gastar productos raros de la despensa.
+      2. CLASIFICACIÓN Y MANEJO DE INSUMOS:
+         - Clasifica mentalmente los productos en: (A) Insumos de cocina base (carnes, verduras, tubérculos, menestras, huevos, lácteos básicos), (B) Postres/Snacks/Panadería (panetón, galletas, chocolates, dulces), (C) Licores/Bebidas alcohólicas (ron, cerveza, vino).
+         - NUNCA mezcles licores o dulces/panetón en platos principales salados o desayunos nutritivos diarios.
+         - Si un ítem es un licor o bebida alcohólica, NO lo uses como ingrediente de comida a menos que sea un marinado tradicional legítimo (ej. seco de res con chicha/cerveza) o un postre adulto específico. NUNCA sugieras "tostadas francesas con ron" ni híbridos extraños.
+      3. LIBERTAD DE INGREDIENTES BÁSICOS ("ingredientes_extra"):
+         - Si la despensa carece de ingredientes base para armar un platillo real completo, o solo contiene insumos secundarios/snacks, apóyate LIBREMENTE en ingredientes básicos habituales de cualquier cocina (como arroz, huevos, papas, cebolla, ajo, aceite, tomate, sal o harina) y lístalos bajo "ingredientes_extra".
+         - No estás obligado a usar todos los productos de la despensa en una sola receta. Usa solo los ingredientes de la despensa que tengan sentido culinario lógico para el platillo.
+      4. COHERENCIA DULCE VS SALADO:
+         - Frutas dulces, panetón o galletas solo se usan en desayunos, meriendas o postres lógicos. NUNCA los mezcles en guisos o platos salados principales.
+      5. SEGURIDAD ALIMENTARIA: Prohibido sugerir aves o carnes crudas o desinfectadas en frío (prohibido "ceviche de pollo").
+      6. RESTRICCIONES Y ALERGIAS: Respeta al 100% cualquier alimento prohibido o alergia declarada en el contexto del usuario.
       `.trim();
 
       const response = await IAService.generate<{ recetas: RES_Receta[] }>(

@@ -50,15 +50,17 @@ export class UC_TipDiario {
           .join('\n');
 
         prompt = `
-Eres un asistente nutricional amigable de TinyFood.
+Eres un asistente nutricional y culinario amigable de TinyFood.
 
 El usuario tiene estos alimentos PRÓXIMOS A VENCER:
 ${listaUrgente}
 
 ${contextoBloque}
 
-Genera un consejo breve, práctico y motivador para usar esos alimentos antes de que se malogren.
-Sé específico con el alimento más urgente.
+REGLAS PARA EL TIP:
+1. Sé 100% realista: Si el producto a vencer es un ingrediente de cocina (verdura, fruta, carne, huevo), sugiere un uso práctico o preparación sencilla en la cocina casera.
+2. Si el producto es un snack, producto de repostería (ej. panetón, galletas) o licor, NO inventes platillos extravagantes o desayunos raros con alcohol. Sugiere su conservación adecuada, consumo moderado en la merienda (acompañado de té/café si es dulce) o guardado sellado.
+3. El consejo debe ser breve (1-2 oraciones), sensato y de consumo cotidiano.
 
 Devuelve ÚNICAMENTE este JSON:
 {
@@ -75,15 +77,16 @@ Devuelve ÚNICAMENTE este JSON:
           .join('\n');
 
         prompt = `
-Eres un asistente nutricional amigable de TinyFood.
+Eres un asistente nutricional y culinario amigable de TinyFood.
 
 El usuario tiene estos alimentos en su despensa:
 ${listaDisponibles}
 
 ${contextoBloque}
 
-Genera un consejo útil del día sobre cómo aprovechar mejor esos alimentos,
-una combinación saludable, o un tip de cocina/nutrición relacionado.
+REGLAS PARA EL TIP:
+1. Genera un consejo breve y realista del día (máximo 2 oraciones) sobre nutrición diaria, conservación o cómo incorporar esos insumos en la comida casera.
+2. No inventes combinaciones raras o platillos artificiales con snacks o licores. Si hay dulces o licores, da consejos de conservación o consumo moderado.
 
 Devuelve ÚNICAMENTE este JSON:
 {
@@ -100,8 +103,7 @@ Eres un asistente nutricional amigable de TinyFood.
 El usuario tiene la despensa vacía.
 ${contextoBloque}
 
-Genera un consejo motivador y útil sobre qué alimentos saludables debería comprar
-o cómo organizar mejor su despensa.
+Genera un consejo motivador y útil sobre qué alimentos básicos saludables (verduras, proteínas, menestras, frutas) debería comprar para organizar su despensa diaria.
 
 Devuelve ÚNICAMENTE este JSON:
 {

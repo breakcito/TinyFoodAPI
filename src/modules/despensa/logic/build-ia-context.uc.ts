@@ -94,8 +94,8 @@ export class UC_BuildIAContext {
             : 'Puede preparar recetas de cualquier dificultad y tiempo.';
 
         const estilos = config.estilosComida?.length
-          ? `Estilos de cocina favoritos: ${config.estilosComida.join(', ')}`
-          : null;
+          ? `Estilos gastronómicos y cocina preferida: ${config.estilosComida.join(', ')}. Inspírate en comidas caseras, populares y cotidianas de estas tradiciones gastronómicas (ej. si incluye Peruana: locro, arroz a la cubana, menestras, tortilla de verduras; si incluye China: chifa, arroz chaufa, tallarín saltado, etc.).`
+          : 'Estilos de cocina: Comida casera, familiar, variada y cotidiana del día a día.';
 
         const equipamiento = config.equipamiento?.length
           ? `Equipamiento disponible: ${config.equipamiento.join(', ')}`
