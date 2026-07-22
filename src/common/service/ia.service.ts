@@ -124,29 +124,62 @@ export class IAService implements OnModuleInit {
     schema,
     schemaName = 'response_schema',
     temperature = 0.4,
+    isVision = false,
   }: {
     model: string;
     messages: any[];
     schema?: any;
     schemaName?: string;
     temperature?: number;
+    isVision?: boolean;
   }): Promise<T> {
     if (!this.instance) {
       throw new Error('[IAService] Instancia no inicializada');
     }
 
     let currentMessages = JSON.parse(JSON.stringify(messages));
-    let responseFormat: any = schema
-      ? {
-          type: 'json_schema' as const,
-          json_schema: {
-            name: schemaName,
-            schema,
-          },
-        }
-      : { type: 'json_object' as const };
+    
+    // Inyectar esquema en el prompt si se requiere
+    const injectSchemaPrompt = () => {
+      if (!schema) return;
+      const schemaPrompt = `\n\n[REGLA DE FORMATO OBLIGATORIA]: Responde ÚNICAMENTE con un OBJETO JSON válido (un objeto que comience con '{' y termine con '}') que cumpla estrictamente con esta estructura:\n${JSON.stringify(schema, null, 2)}`;
 
-    // --- NIVEL 1: Intentar petición original con json_schema o json_object ---
+      const lastIndex = currentMessages.length - 1;
+      const lastMsg = currentMessages[lastIndex];
+
+      if (typeof lastMsg.content === 'string') {
+        currentMessages[lastIndex] = {
+          ...lastMsg,
+          content: lastMsg.content + schemaPrompt,
+        };
+      } else if (Array.isArray(lastMsg.content)) {
+        currentMessages[lastIndex] = {
+          ...lastMsg,
+          content: lastMsg.content.map((c: any) =>
+            c.type === 'text' ? { ...c, text: c.text + schemaPrompt } : c,
+          ),
+        };
+      }
+    };
+
+    // Para modelos de visión en Groq, usar `json_object` directamente desde el primer intento
+    let responseFormat: any;
+    if (isVision) {
+      responseFormat = { type: 'json_object' as const };
+      injectSchemaPrompt();
+    } else if (schema) {
+      responseFormat = {
+        type: 'json_schema' as const,
+        json_schema: {
+          name: schemaName,
+          schema,
+        },
+      };
+    } else {
+      responseFormat = { type: 'json_object' as const };
+    }
+
+    // --- NIVEL 1: Intentar petición con el formato adecuado ---
     try {
       const completion = await this.instance.groq.chat.completions.create({
         model,
@@ -162,29 +195,12 @@ export class IAService implements OnModuleInit {
       const errMsg = String(error?.message || error || '');
       console.warn(`[IAService] Nivel 1 falló para modelo '${model}': ${errMsg}`);
 
-      // Preparar inyección de prompt con instrucciones de esquema para niveles 2 y 3
-      if (schema) {
-        const schemaPrompt = `\n\n[REGLA DE FORMATO OBLIGATORIA]: Responde ÚNICAMENTE con un OBJETO JSON válido (un objeto que comience con '{' y termine con '}') que cumpla estrictamente con esta estructura:\n${JSON.stringify(schema, null, 2)}`;
-
-        const lastIndex = currentMessages.length - 1;
-        const lastMsg = currentMessages[lastIndex];
-
-        if (typeof lastMsg.content === 'string') {
-          currentMessages[lastIndex] = {
-            ...lastMsg,
-            content: lastMsg.content + schemaPrompt,
-          };
-        } else if (Array.isArray(lastMsg.content)) {
-          currentMessages[lastIndex] = {
-            ...lastMsg,
-            content: lastMsg.content.map((c: any) =>
-              c.type === 'text' ? { ...c, text: c.text + schemaPrompt } : c,
-            ),
-          };
-        }
+      // Si Nivel 1 falló con json_schema, inyectar esquema para los siguientes niveles
+      if (responseFormat.type === 'json_schema') {
+        injectSchemaPrompt();
       }
 
-      // --- NIVEL 2: Fallback a json_object si json_schema no es soportado ---
+      // --- NIVEL 2: Fallback a json_object si json_schema no fue soportado ---
       if (schema && responseFormat.type === 'json_schema') {
         try {
           console.log(`[IAService] Nivel 2: Reintentando '${model}' con json_object...`);
@@ -251,6 +267,7 @@ export class IAService implements OnModuleInit {
       schema,
       schemaName,
       temperature: 0.7,
+      isVision: false,
     });
   }
 
@@ -285,6 +302,7 @@ export class IAService implements OnModuleInit {
       schema,
       schemaName,
       temperature: 0.4,
+      isVision: true,
     });
   }
 }
