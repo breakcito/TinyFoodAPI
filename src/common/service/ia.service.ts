@@ -44,7 +44,11 @@ export class IAService implements OnModuleInit {
    */
   private static cleanAndParseJson<T>(raw: string): T {
     let cleaned = raw
+      // Eliminar etiqueta <think> cerrada normalmente
       .replace(/<think>[\s\S]*?<\/think>/gi, '')
+      // Eliminar etiqueta <think> sin cerrar (stream truncado o modelo de razonamiento con salida parcial)
+      .replace(/<think>[\s\S]*/gi, '')
+      // Limpiar bloques de código markdown
       .replace(/^```json\s*/i, '')
       .replace(/^```\s*/i, '')
       .replace(/\s*```$/, '')
